@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lohnrechner – Szenarienvergleich</title>
+<style>
+  :root{
+    --paper:#ECEEF1;
+    --card:#FFFFFF;
+    --ink:#16181D;
+    --muted:#646C78;
+    --line:#D8DCE2;
+    --line-strong:#B8BEC8;
+    --accent:#D8232A;
+    --c-basis:#5B6EE8;
+    --c-erf:#EE7B32;
+    --c-qual:#F5A45E;
+    --c-treue:#FAC79A;
+    --c-kind:#57CBB4;
+    --c-spesen:#9AA3B0;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Helvetica Neue",Helvetica,Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    font-size:15px;line-height:1.45;font-variant-numeric:tabular-nums;
+  }
+  .wrap{max-width:1320px;margin:0 auto;padding:26px 20px 80px}
+
+  header.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;
+    padding-bottom:14px;margin-bottom:22px;border-bottom:2px solid var(--ink)}
+  header.top h1{font-size:25px;line-height:1.1;margin:0;font-weight:700;letter-spacing:-.02em}
+  header.top p{margin:0;color:var(--muted);font-size:14px;max-width:60ch;flex:1 1 320px}
+
+  .grid{display:grid;grid-template-columns:minmax(0,370px) minmax(0,1fr);gap:22px;align-items:start}
+  @media (max-width:960px){.grid{grid-template-columns:1fr}}
+
+  #simPanel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+  .simRow{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .simLabels{flex:none}
+  .simLabel{font-weight:700;font-size:14.5px;letter-spacing:-.01em}
+  .simSub{font-size:12px;color:var(--muted);margin-top:1px}
+  #extraYearsSlider{flex:1 1 160px;min-width:140px;accent-color:var(--ink);height:20px;cursor:pointer}
+  .simValue{flex:none;display:flex;align-items:baseline;gap:6px;font-size:24px;font-weight:700;
+    letter-spacing:-.02em;min-width:90px;justify-content:flex-end}
+  .simValue .unit{font-size:12px;font-weight:400;color:var(--muted)}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px 18px;margin-bottom:16px}
+  .panel > h2{font-size:13px;font-weight:700;margin:0 0 13px;padding-bottom:8px;border-bottom:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .panel > h2 .note{font-weight:400;color:var(--muted);font-size:12px}
+
+  /* scenario chips */
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line-strong);
+    border-radius:20px;padding:5px 10px 5px 9px;font-size:13.5px;cursor:pointer;color:#3d434d}
+  .chip .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .chip.on{border-color:var(--ink);color:var(--ink);font-weight:600;box-shadow:inset 0 0 0 1px var(--ink)}
+  .chip .x{border:0;background:none;font:inherit;font-size:15px;line-height:1;color:var(--muted);cursor:pointer;padding:0 0 0 2px}
+  .chip .x:hover{color:var(--accent)}
+  .btn{font:inherit;font-size:13px;background:none;border:1px solid var(--line-strong);border-radius:6px;
+    padding:5px 11px;cursor:pointer;color:#3d434d}
+  .btn:hover{border-color:var(--ink);color:var(--ink)}
+  .btn.solid{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn.solid:hover{background:#000}
+  .btnrow{display:flex;flex-wrap:wrap;gap:7px}
+
+  .row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+  .row label{flex:1;min-width:0;font-size:14px;color:#333;line-height:1.25}
+  .row .sub{display:block;font-size:12px;color:var(--muted)}
+  input,select{font:inherit;font-variant-numeric:tabular-nums;color:var(--ink);background:#fff;
+    border:1px solid var(--line-strong);border-radius:6px;padding:6px 8px}
+  input[type=number]{width:96px;text-align:right}
+  input[type=text]{width:100%}
+  select{max-width:200px}
+  input:focus,select:focus,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .edu{border-bottom:1px dotted var(--line);padding-bottom:9px;margin-bottom:9px}
+  .edu:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+  .edu .name{font-weight:600;font-size:14px;margin-bottom:6px}
+  .inline{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+  .inline .tag{font-size:12px;color:var(--muted)}
+  .inline input[type=number]{width:72px}
+
+  details.params{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:16px}
+  details.params > summary{cursor:pointer;padding:14px 18px;font-size:13px;font-weight:700;list-style:none;
+    display:flex;justify-content:space-between;align-items:center}
+  details.params > summary::-webkit-details-marker{display:none}
+  details.params > summary::after{content:"öffnen";font-weight:400;color:var(--muted)}
+  details.params[open] > summary::after{content:"schliessen"}
+  details.params[open] > summary{border-bottom:1px solid var(--line)}
+  .params-body{padding:15px 18px 18px}
+  .params-body h3{font-size:12px;margin:16px 0 8px;color:var(--muted);font-weight:600}
+  .params-body h3:first-child{margin-top:0}
+  .syncbar{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#3d434d;
+    background:#F5F6F8;border:1px solid var(--line);border-radius:7px;padding:9px 11px;margin-bottom:14px}
+  .syncbar input{margin-top:2px}
+
+  /* comparison */
+  .cmp{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table.cmp-t{border-collapse:collapse;width:100%;font-size:14px}
+  table.cmp-t th,table.cmp-t td{padding:9px 12px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+  table.cmp-t th:first-child,table.cmp-t td:first-child{text-align:left;color:var(--muted);font-size:13px;font-weight:400}
+  table.cmp-t thead th{font-size:13.5px;font-weight:700;border-bottom:1px solid var(--line-strong);vertical-align:bottom}
+  table.cmp-t thead th .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+  table.cmp-t tr.total td{border-top:2px solid var(--ink);border-bottom:0;font-size:18px;font-weight:700;padding-top:11px;letter-spacing:-.01em}
+  table.cmp-t tr.total td:first-child{font-size:13px;font-weight:400;color:var(--ink)}
+  table.cmp-t tr.delta td{border-bottom:0;font-size:13px;padding-top:2px;color:var(--muted)}
+  .barcell{height:4px;border-radius:2px;margin-top:6px}
+
+  .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:7px;overflow:hidden}
+  .seg button{font:inherit;font-size:12.5px;background:#fff;border:0;padding:5px 11px;cursor:pointer;color:#3d434d}
+  .seg button + button{border-left:1px solid var(--line-strong)}
+  .seg button.on{background:var(--ink);color:#fff}
+
+  svg{display:block;width:100%;height:auto}
+  #lineChartWrap{position:relative}
+  #lineChart svg{cursor:crosshair;touch-action:pan-y}
+  .chart-tooltip{
+    display:none;position:absolute;top:0;left:0;z-index:5;pointer-events:none;
+    background:var(--ink);color:#fff;border-radius:8px;padding:9px 11px;
+    font-size:12.5px;line-height:1.5;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.22);
+  }
+  .chart-tooltip .tthead{font-weight:700;font-size:12px;margin-bottom:4px;color:#fff}
+  .chart-tooltip .ttrow{display:flex;align-items:center;gap:7px}
+  .chart-tooltip .ttrow i{width:8px;height:8px;border-radius:2px;flex:none}
+  .chart-tooltip .ttrow .ttname{color:#C7CBD3}
+  .chart-tooltip .ttrow .ttval{margin-left:14px;font-weight:600;font-variant-numeric:tabular-nums}
+  .chart-tooltip .ttrow.off{opacity:.45}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:#3d434d;margin-top:11px}
+  .swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+  .chart-note{font-size:12.5px;color:var(--muted);margin:10px 0 0}
+
+  .split{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:16px}
+  .split div{background:#fff;padding:10px 12px}
+  .split .k{font-size:12.5px;color:var(--muted);display:block;margin-bottom:2px}
+  .split .v{font-size:17px;font-weight:600;letter-spacing:-.01em}
+
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table.yr{border-collapse:collapse;width:100%;font-size:13.5px;min-width:780px}
+  table.yr th,table.yr td{padding:7px 9px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+  table.yr th{font-size:11.5px;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line-strong)}
+  table.yr th:first-child,table.yr td:first-child{text-align:left}
+  table.yr tbody tr:hover td{background:#F7F8FA}
+  td.strong{font-weight:600}
+  td.dim{color:var(--muted)}
+  table.yr tfoot td{border-bottom:0;border-top:2px solid var(--ink);font-weight:700;padding-top:9px}
+  .mark{position:relative}
+  .mark::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent)}
+  .events{font-size:12px;color:var(--accent);text-align:left}
+  .foot{margin-top:20px;font-size:12.5px;color:var(--muted);max-width:78ch}
+  .foot b{color:#3d434d;font-weight:600}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--ink);color:#fff;
+    padding:9px 16px;border-radius:7px;font-size:13.5px;opacity:0;pointer-events:none}
+  .toast.show{opacity:1}
+  @media (prefers-reduced-motion:no-preference){.toast{transition:opacity .2s ease}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Lohnrechner</h1>
+    <p>Mehrere Laufbahnen nebeneinander rechnen: Monatslohn, Verlauf und kumuliertes Total.</p>
+    <div class="btnrow">
+      <button class="btn" id="shareBtn" type="button">Link kopieren</button>
+    </div>
+  </header>
+
+  <section class="panel" id="simPanel">
+    <div class="simRow">
+      <div class="simLabels">
+        <div class="simLabel">Zus\u00e4tzliche Jahre simulieren</div>
+        <div class="simSub">Wird bei allen Szenarien am Ende angeh\u00e4ngt</div>
+      </div>
+      <input type="range" id="extraYearsSlider" min="0" max="30" step="1" value="0">
+      <div class="simValue"><span id="extraYearsVal">0</span><span class="unit">Jahre</span></div>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <!-- ============ LEFT: EDITOR ============ -->
+    <div>
+      <section class="panel">
+        <h2>Szenarien <span class="note" id="scCount"></span></h2>
+        <div class="chips" id="chips"></div>
+        <div class="btnrow">
+          <button class="btn solid" id="addBtn" type="button">Neues Szenario</button>
+          <button class="btn" id="dupBtn" type="button">Duplizieren</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 id="editHead">Laufbahn</h2>
+        <div class="row" style="margin-bottom:14px">
+          <label for="scName" style="flex:none">Name</label>
+          <input type="text" id="scName" maxlength="28">
+        </div>
+        <div id="fCareer"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Ausbildung <span class="note">Bonus ab Abschluss</span></h2>
+        <div id="fEdu"></div>
+      </section>
+
+      <details class="params">
+        <summary>Formel-Parameter</summary>
+        <div class="params-body">
+          <label class="syncbar">
+            <input type="checkbox" id="syncParams" checked>
+            <span>Für alle Szenarien identisch. Ausschalten, um zum Beispiel eine Erhöhung des Grundlohns gegen die heutige Formel zu rechnen.</span>
+          </label>
+          <div id="fParams"></div>
+          <div class="btnrow" style="justify-content:flex-end;margin-top:14px">
+            <button class="btn" id="resetBtn" type="button">Auf Standardwerte zurücksetzen</button>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- ============ RIGHT: RESULTS ============ -->
+    <div>
+      <section class="panel">
+        <h2>Vergleich <span class="note" id="cmpNote"></span></h2>
+        <div class="cmp"><table class="cmp-t" id="cmpTable"></table></div>
+      </section>
+
+      <section class="panel">
+        <h2>Verlauf
+          <span class="seg" id="modeSeg">
+            <button type="button" data-mode="cum" class="on">Kumuliert</button>
+            <button type="button" data-mode="month">Monatslohn</button>
+          </span>
+        </h2>
+        <div id="lineChartWrap">
+          <div id="lineChart"></div>
+          <div id="lineTooltip" class="chart-tooltip" role="status" aria-live="polite"></div>
+        </div>
+        <div class="legend" id="lineLegend"></div>
+        <p class="chart-note" id="lineNote"></p>
+      </section>
+
+      <section class="panel">
+        <h2 id="detailHead">Detail</h2>
+        <div class="split" id="detailSplit"></div>
+        <div id="stackChart"></div>
+        <div class="legend">
+          <span><i class="swatch" style="background:var(--c-basis)"></i>Basis</span>
+          <span><i class="swatch" style="background:var(--c-erf)"></i>Erfahrung</span>
+          <span><i class="swatch" style="background:var(--c-qual)"></i>Qualifikation</span>
+          <span><i class="swatch" style="background:var(--c-treue)"></i>Firmentreue</span>
+          <span><i class="swatch" style="background:var(--c-kind)"></i>Kinderzulage</span>
+          <span><i class="swatch" style="background:var(--c-spesen)"></i>Spesen</span>
+        </div>
+        <p class="chart-note" id="stackNote"></p>
+      </section>
+
+      <section class="panel">
+        <h2 id="yrHead">Jahr für Jahr</h2>
+        <div class="tablewrap"><table class="yr" id="yrTable"></table></div>
+      </section>
+
+      <p class="foot" id="assumptions"></p>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+
+var $ = function(id){ return document.getElementById(id); };
+
+function fmt(n){
+  var neg = n < 0; n = Math.round(Math.abs(n));
+  var s = String(n), out = "";
+  while (s.length > 3){ out = "\u2019" + s.slice(-3) + out; s = s.slice(0,-3); }
+  return (neg ? "\u2212" : "") + s + out;
+}
+function signed(n){ return (n > 0 ? "+" : n < 0 ? "\u2212" : "\u00b1") + fmt(Math.abs(n)); }
+
+var COLORS = ["#2F5FE0","#E0672F","#12A594","#8B5CF6","#D8232A","#A8801F"];
+
+// ---------------- field schema ----------------
+var CAREER = [
+  {k:"years",       t:"num", def:10, min:1,  max:45, step:1,   label:"Berechnungsdauer",           sub:"Anzahl Jahre im Unternehmen"},
+  {k:"startOffset", t:"num", def:0,  min:0,  max:45, step:1,   label:"Startpunkt auf der Zeitachse", sub:"Jahre, die zuvor anderswo vergehen, z.\u00a0B. 3 f\u00fcr ein Vollzeit-Bachelorstudium"},
+  {k:"externBefore",t:"num", def:0,  min:0,  max:45, step:0.5, label:"Externe Erfahrung bei Eintritt", sub:"Jahre vor dem Unternehmen"},
+  {k:"internBefore",t:"num", def:0,  min:0,  max:45, step:0.5, label:"Bereits im Unternehmen",     sub:"Jahre, falls schon angestellt"},
+  {k:"pensum",      t:"num", def:100,min:10, max:100,step:5,   label:"Pensum",                     sub:"Prozent"},
+  {k:"counting",    t:"sel", def:"completed", label:"Anrechnung der Jahre",
+     opts:[["completed","Abgeschlossene Jahre"],["current","Laufendes Jahr z\u00e4hlt mit"]]},
+  {k:"kids",        t:"num", def:0,  min:0,  max:12, step:1,   label:"Kinder", sub:"Anzahl"},
+  {k:"kidsFrom",    t:"num", def:1,  min:1,  max:45, step:1,   label:"Kinderzulage ab Jahr"}
+];
+
+var MODE3 = [["none","keine"],["have","bei Eintritt vorhanden"],["during","Abschluss im Jahr"]];
+var MODE3B= [["none","keiner"],["have","bei Eintritt vorhanden"],["during","berufsbegleitend"]];
+
+var EDU = [
+  {name:"EFZ", fields:[
+    {k:"efzMode", t:"sel", def:"none", opts:MODE3},
+    {k:"efzYear", t:"num", def:1, min:1, max:45, step:1, tag:"Jahr", showIf:function(c){return c.efzMode==="during";}}
+  ]},
+  {name:"HF", fields:[
+    {k:"hfMode", t:"sel", def:"none", opts:MODE3},
+    {k:"hfYear", t:"num", def:1, min:1, max:45, step:1, tag:"Jahr", showIf:function(c){return c.hfMode==="during";}}
+  ]},
+  {name:"Bachelor", fields:[
+    {k:"baMode", t:"sel", def:"none", opts:MODE3B},
+    {k:"baFrom", t:"num", def:1, min:1, max:45, step:1, tag:"Start Jahr", showIf:function(c){return c.baMode==="during";}},
+    {k:"baDur",  t:"num", def:3, min:1, max:10, step:1, tag:"Dauer",      showIf:function(c){return c.baMode==="during";}}
+  ]},
+  {name:"Master", fields:[
+    {k:"maMode", t:"sel", def:"none", opts:MODE3B},
+    {k:"maFrom", t:"num", def:4, min:1, max:45, step:1, tag:"Start Jahr", showIf:function(c){return c.maMode==="during";}},
+    {k:"maDur",  t:"num", def:2, min:1, max:10, step:1, tag:"Dauer",      showIf:function(c){return c.maMode==="during";}}
+  ]},
+  {name:"CAS", fields:[
+    {k:"casN",    t:"num", def:0, min:0, max:10, step:1, tag:"Anzahl"},
+    {k:"casFrom", t:"num", def:1, min:1, max:45, step:1, tag:"ab Jahr"}
+  ]},
+  {name:"MAS", fields:[
+    {k:"masN",    t:"num", def:0, min:0, max:10, step:1, tag:"Anzahl"},
+    {k:"masFrom", t:"num", def:1, min:1, max:45, step:1, tag:"ab Jahr"}
+  ]}
+];
+
+var PARAMS = [
+  {h:"Basis"},
+  {k:"pBasis",  t:"num", def:5400, step:50,  label:"Grundlohn pro Monat"},
+  {k:"pSpesen", t:"num", def:100,  step:10,  label:"Pauschale Spesen pro Monat"},
+  {h:"Erfahrung"},
+  {k:"pExtRate",t:"num", def:150,  step:10,  label:"Extern pro Jahr"},
+  {k:"pExtCap", t:"num", def:1500, step:100, label:"Extern maximal"},
+  {k:"pIntRate",t:"num", def:150,  step:10,  label:"Intern pro Jahr"},
+  {k:"pErfCap", t:"num", def:3000, step:100, label:"Erfahrung total maximal"},
+  {h:"Qualifikation"},
+  {k:"pEfz",    t:"num", def:200,  step:50,  label:"EFZ"},
+  {k:"pHf",     t:"num", def:500,  step:50,  label:"HF"},
+  {k:"pBa",     t:"num", def:750,  step:50,  label:"Bachelor"},
+  {k:"pMa",     t:"num", def:500,  step:50,  label:"Master"},
+  {k:"pCas",    t:"num", def:50,   step:10,  label:"CAS je Abschluss"},
+  {k:"pMas",    t:"num", def:200,  step:10,  label:"MAS je Abschluss"},
+  {k:"pCasMasCap",t:"num",def:200, step:50,  label:"CAS + MAS maximal"},
+  {k:"pQualCap",t:"num", def:1000, step:100, label:"Qualifikation total maximal"},
+  {h:"Firmentreue und Kinder"},
+  {k:"pTreue",  t:"num", def:25,   step:5,   label:"Firmentreue pro Jahr"},
+  {k:"pKind",   t:"num", def:300,  step:50,  label:"Zulage pro Kind und Monat"},
+  {h:"Auszahlung"},
+  {k:"pSalMonths",   t:"num", def:13, min:12, max:14, step:1, label:"Lohnzahlungen pro Jahr"},
+  {k:"pSpesenMonths",t:"num", def:12, min:12, max:14, step:1, label:"Spesenzahlungen pro Jahr"},
+  {k:"pKindMonths",  t:"num", def:12, min:12, max:14, step:1, label:"Kinderzulagen pro Jahr"},
+  {k:"pTeuerung",    t:"num", def:0,  min:0,  max:10, step:0.1,label:"Teuerungsausgleich pro Jahr in Prozent"}
+];
+
+var PARAM_KEYS = PARAMS.filter(function(f){ return f.k; }).map(function(f){ return f.k; });
+
+function blank(){
+  var c = {};
+  CAREER.forEach(function(f){ c[f.k] = f.def; });
+  EDU.forEach(function(g){ g.fields.forEach(function(f){ c[f.k] = f.def; }); });
+  PARAMS.forEach(function(f){ if (f.k) c[f.k] = f.def; });
+  return c;
+}
+
+// ---------------- state ----------------
+var state = { active:0, sync:true, mode:"cum", extraYears:0, scenarios:[] };
+
+function newScenario(name, base){
+  var c = base ? JSON.parse(JSON.stringify(base)) : blank();
+  c.name = name;
+  return c;
+}
+
+function initState(){
+  var loaded = readHash();
+  if (loaded){ state = loaded; return; }
+  var a = newScenario("Ohne Studium");
+  var b = newScenario("Bachelor berufsbegleitend");
+  b.baMode = "during"; b.baFrom = 1; b.baDur = 3;
+  state.scenarios = [a, b];
+}
+
+// ---------------- URL sharing ----------------
+function writeHash(){
+  try{
+    var payload = { a:state.active, s:state.sync, m:state.mode, ey:state.extraYears, sc:state.scenarios };
+    var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+    history.replaceState(null, "", "#" + b64);
+  }catch(e){}
+}
+function readHash(){
+  try{
+    if (!location.hash || location.hash.length < 3) return null;
+    var o = JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(1)))));
+    if (!o.sc || !o.sc.length) return null;
+    var def = blank();
+    o.sc.forEach(function(c){
+      Object.keys(def).forEach(function(k){ if (c[k] === undefined) c[k] = def[k]; });
+    });
+    return { active:Math.min(o.a||0,o.sc.length-1), sync:o.s !== false, mode:o.m || "cum",
+      extraYears:o.ey || 0, scenarios:o.sc };
+  }catch(e){ return null; }
+}
+
+// ---------------- model ----------------
+function bonusFrom(mode, from, dur){
+  if (mode === "have") return 1;
+  if (mode === "during") return Math.max(1, Math.round(Number(from) + Number(dur)));
+  return Infinity;
+}
+
+function compute(c, extraYears){
+  var N = Math.max(1, Math.min(45, Math.round((+c.years || 1) + (+extraYears || 0))));
+  var pensum = Math.max(0, +c.pensum) / 100;
+  var offset = c.counting === "current" ? 1 : 0;
+  var teuerung = (+c.pTeuerung || 0) / 100;
+
+  var efzFrom = bonusFrom(c.efzMode, (+c.efzYear) - 1, 1);
+  var hfFrom  = bonusFrom(c.hfMode,  (+c.hfYear)  - 1, 1);
+  var baFrom  = bonusFrom(c.baMode,  c.baFrom, c.baDur);
+  var maFrom  = bonusFrom(c.maMode,  c.maFrom, c.maDur);
+  var casN = Math.max(0, +c.casN), masN = Math.max(0, +c.masN);
+  var kids = Math.max(0, +c.kids);
+
+  var rows = [], tot = { salary:0, spesen:0, kids:0 }, cum = 0;
+
+  for (var y = 1; y <= N; y++){
+    var infl = Math.pow(1 + teuerung, y - 1);
+    var internYears = (+c.internBefore) + (y - 1) + offset;
+
+    var ext = Math.min((+c.externBefore) * (+c.pExtRate), +c.pExtCap);
+    var erf = Math.min(ext + internYears * (+c.pIntRate), +c.pErfCap);
+
+    var q = 0, ev = [];
+    if (y >= efzFrom) q += +c.pEfz;
+    if (y >= hfFrom)  q += +c.pHf;
+    if (y >= baFrom)  q += +c.pBa;
+    if (y >= maFrom)  q += +c.pMa;
+    var cm = 0;
+    if (y >= (+c.casFrom)) cm += casN * (+c.pCas);
+    if (y >= (+c.masFrom)) cm += masN * (+c.pMas);
+    q += Math.min(cm, +c.pCasMasCap);
+    var qual = Math.min(q, +c.pQualCap);
+
+    if (y === efzFrom) ev.push("EFZ");
+    if (y === hfFrom)  ev.push("HF");
+    if (y === baFrom)  ev.push("Bachelor");
+    if (y === maFrom)  ev.push("Master");
+    if (casN > 0 && y === +c.casFrom) ev.push(casN + "\u00d7 CAS");
+    if (masN > 0 && y === +c.masFrom) ev.push(masN + "\u00d7 MAS");
+    if (kids > 0 && y === +c.kidsFrom) ev.push(kids === 1 ? "1 Kind" : kids + " Kinder");
+
+    var treue = internYears * (+c.pTreue);
+    var basis = (+c.pBasis) * infl * pensum;
+    var monthly = basis + (erf + qual + treue) * infl * pensum;
+
+    var salaryY = monthly * (+c.pSalMonths);
+    var spesenM = (+c.pSpesen) * infl * pensum;
+    var spesenY = spesenM * (+c.pSpesenMonths);
+    var kidsM   = (y >= +c.kidsFrom ? kids * (+c.pKind) : 0);
+    var kidsY   = kidsM * (+c.pKindMonths);
+
+    tot.salary += salaryY; tot.spesen += spesenY; tot.kids += kidsY;
+    cum += salaryY + spesenY + kidsY;
+
+    rows.push({ y:y, basis:basis, erf:erf*infl*pensum, qual:qual*infl*pensum, treue:treue*infl*pensum,
+      monthly:monthly, salaryY:salaryY, spesenY:spesenY, kidsY:kidsY, kidsM:kidsM, spesenM:spesenM,
+      cum:cum, events:ev.join(", ") });
+  }
+  return { rows:rows, tot:tot, N:N, offset:Math.max(0, Math.round(+c.startOffset || 0)),
+    grand:tot.salary + tot.spesen + tot.kids,
+    first:rows[0].monthly, last:rows[N-1].monthly, avg:tot.salary / N / (+c.pSalMonths) };
+}
+
+// ---------------- form building ----------------
+function fieldEl(f){
+  var el;
+  if (f.t === "sel"){
+    el = document.createElement("select");
+    f.opts.forEach(function(o){
+      var op = document.createElement("option");
+      op.value = o[0]; op.textContent = o[1]; el.appendChild(op);
+    });
+  } else {
+    el = document.createElement("input");
+    el.type = "number";
+    if (f.min !== undefined) el.min = f.min;
+    if (f.max !== undefined) el.max = f.max;
+    el.step = f.step === undefined ? 1 : f.step;
+  }
+  el.id = "f_" + f.k;
+  el.dataset.key = f.k;
+  el.addEventListener("input", onEdit);
+  el.addEventListener("change", onEdit);
+  return el;
+}
+
+function buildRows(list, host){
+  list.forEach(function(f){
+    if (f.h){
+      var h = document.createElement("h3"); h.textContent = f.h; host.appendChild(h); return;
+    }
+    var row = document.createElement("div"); row.className = "row";
+    var lab = document.createElement("label"); lab.htmlFor = "f_" + f.k;
+    lab.appendChild(document.createTextNode(f.label));
+    if (f.sub){ var s = document.createElement("span"); s.className = "sub"; s.textContent = f.sub; lab.appendChild(s); }
+    row.appendChild(lab); row.appendChild(fieldEl(f)); host.appendChild(row);
+  });
+}
+
+function buildForms(){
+  buildRows(CAREER, $("fCareer"));
+  buildRows(PARAMS, $("fParams"));
+  EDU.forEach(function(g){
+    var box = document.createElement("div"); box.className = "edu";
+    var nm = document.createElement("div"); nm.className = "name"; nm.textContent = g.name; box.appendChild(nm);
+    var line = document.createElement("div"); line.className = "inline";
+    g.fields.forEach(function(f){
+      if (f.tag){
+        var t = document.createElement("span"); t.className = "tag"; t.textContent = f.tag;
+        t.dataset.tagFor = f.k; line.appendChild(t);
+      }
+      line.appendChild(fieldEl(f));
+    });
+    box.appendChild(line); $("fEdu").appendChild(box);
+  });
+}
+
+function fillForm(){
+  var c = state.scenarios[state.active];
+  $("scName").value = c.name;
+  Object.keys(c).forEach(function(k){
+    var el = $("f_" + k); if (el) el.value = c[k];
+  });
+  EDU.forEach(function(g){
+    g.fields.forEach(function(f){
+      if (!f.showIf) return;
+      var vis = f.showIf(c), el = $("f_" + f.k);
+      el.hidden = !vis;
+      var tag = document.querySelector('[data-tag-for="' + f.k + '"]');
+      if (tag) tag.hidden = !vis;
+    });
+  });
+  $("syncParams").checked = state.sync;
+  $("editHead").textContent = "Laufbahn \u2013 " + c.name;
+}
+
+function onEdit(e){
+  var k = e.target.dataset.key, v = e.target.value;
+  var c = state.scenarios[state.active];
+  c[k] = (e.target.type === "number") ? (v === "" ? 0 : parseFloat(v)) : v;
+  if (state.sync && PARAM_KEYS.indexOf(k) !== -1){
+    state.scenarios.forEach(function(s){ s[k] = c[k]; });
+  }
+  render();
+}
+
+// ---------------- charts ----------------
+function lineChart(models, mode){
+  // Each row's position on the shared timeline: offset years already
+  // elapsed (e.g. a full-time Bachelor) plus years actually worked here.
+  var W = 720, H = 280, padL = 62, padR = 12, padT = 12, padB = 28;
+  var iw = W - padL - padR, ih = H - padT - padB;
+  var minAbs = 0, maxAbs = 1, max = 0;
+  models.forEach(function(m){
+    minAbs = Math.min(minAbs, m.offset);
+    maxAbs = Math.max(maxAbs, m.offset + m.N - 1);
+    m.rows.forEach(function(r){ max = Math.max(max, mode === "cum" ? r.cum : r.monthly); });
+  });
+  var span = Math.max(1, maxAbs - minAbs);
+  var mag = Math.pow(10, Math.floor(Math.log(max) / Math.LN10));
+  var step = mag / 2; while (max / step > 6) step *= 2;
+  var top = Math.ceil(max / step) * step || step;
+
+  var X = function(abs){ return padL + (abs - minAbs) / span * iw; };
+  var Y = function(v){ return padT + ih - v / top * ih; };
+  var hasOffsets = models.some(function(m){ return m.offset > 0; });
+
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Verlauf pro Szenario, zeitlich ausgerichtet">';
+  for (var g = 0; g <= top + 0.5; g += step){
+    var yy = Y(g);
+    s += '<line x1="'+padL+'" y1="'+yy.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+yy.toFixed(1)+
+         '" stroke="'+(g===0?'#16181D':'#E2E5EA')+'"/>' +
+         '<text x="'+(padL-8)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="#646C78">'+fmt(g)+'</text>';
+  }
+  var every = Math.max(1, Math.ceil(span / 12));
+  for (var a = minAbs; a <= maxAbs; a++){
+    if ((a - minAbs) % every === 0 || a === minAbs || a === maxAbs)
+      s += '<text x="'+X(a).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10.5" fill="#646C78">'+a+'</text>';
+  }
+  if (hasOffsets){
+    // Mark where each offset scenario's clock actually starts.
+    models.forEach(function(m, i){
+      if (m.offset <= minAbs) return;
+      var x = X(m.offset);
+      s += '<line x1="'+x.toFixed(1)+'" y1="'+padT+'" x2="'+x.toFixed(1)+'" y2="'+(padT+ih)+
+           '" stroke="'+COLORS[i%COLORS.length]+'" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>';
+    });
+  }
+  models.forEach(function(m, i){
+    var col = COLORS[i % COLORS.length], d = "";
+    m.rows.forEach(function(r, j){
+      var abs = m.offset + (r.y - 1);
+      d += (j ? "L" : "M") + X(abs).toFixed(1) + " " + Y(mode === "cum" ? r.cum : r.monthly).toFixed(1) + " ";
+    });
+    s += '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+    var last = m.rows[m.rows.length-1], lastAbs = m.offset + last.y - 1;
+    s += '<circle cx="'+X(lastAbs).toFixed(1)+'" cy="'+Y(mode==="cum"?last.cum:last.monthly).toFixed(1)+'" r="3.5" fill="'+col+'"/>';
+  });
+  s += '<line id="hoverGuide" x1="0" y1="'+padT+'" x2="0" y2="'+(padT+ih)+
+       '" stroke="#16181D" stroke-width="1" opacity="0"/>';
+  models.forEach(function(m, i){
+    s += '<circle id="hoverDot'+i+'" r="4.5" fill="'+COLORS[i%COLORS.length]+'" stroke="#fff" stroke-width="1.5" opacity="0"/>';
+  });
+  s += '<rect id="hoverCatch" x="'+padL+'" y="'+padT+'" width="'+iw+'" height="'+ih+'" fill="transparent"/>';
+  s += '</svg>';
+  $("lineChart").innerHTML = s;
+
+  var svgEl = $("lineChart").querySelector("svg");
+  var guide = $("hoverGuide");
+  var dots = models.map(function(_, i){ return document.getElementById("hoverDot" + i); });
+  var tip = $("lineTooltip");
+  var wrap = $("lineChartWrap");
+
+  function absAt(clientX){
+    var r = svgEl.getBoundingClientRect();
+    var frac = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
+    var vx = frac * W;
+    var abs = minAbs + (vx - padL) / iw * span;
+    return Math.round(Math.min(maxAbs, Math.max(minAbs, abs)));
+  }
+
+  function showAt(clientX, clientY){
+    var abs = absAt(clientX), x = X(abs);
+    guide.setAttribute("x1", x); guide.setAttribute("x2", x); guide.setAttribute("opacity", "1");
+
+    var rowsHtml = "";
+    models.forEach(function(m, i){
+      var ry = abs - m.offset + 1, active = ry >= 1 && ry <= m.N;
+      if (active){
+        var v = mode === "cum" ? m.rows[ry-1].cum : m.rows[ry-1].monthly;
+        dots[i].setAttribute("cx", x); dots[i].setAttribute("cy", Y(v).toFixed(1)); dots[i].setAttribute("opacity", "1");
+        rowsHtml += '<div class="ttrow"><i style="background:'+COLORS[i%COLORS.length]+'"></i>' +
+          '<span class="ttname">'+esc(state.scenarios[i].name)+'</span><span class="ttval">'+fmt(v)+'</span></div>';
+      } else {
+        dots[i].setAttribute("opacity", "0");
+        rowsHtml += '<div class="ttrow off"><i style="background:'+COLORS[i%COLORS.length]+'"></i>' +
+          '<span class="ttname">'+esc(state.scenarios[i].name)+'</span><span class="ttval">noch nicht gestartet</span></div>';
+      }
+    });
+    tip.innerHTML = '<div class="tthead">Jahr '+abs+'</div>' + rowsHtml;
+    tip.style.display = "block";
+
+    var wr = wrap.getBoundingClientRect();
+    var left = clientX - wr.left + 14, top = clientY - wr.top - 14;
+    var tw = tip.offsetWidth, th = tip.offsetHeight;
+    if (left + tw > wr.width) left = clientX - wr.left - tw - 14;
+    if (top + th > wr.height) top = wr.height - th - 4;
+    if (top < 0) top = 4;
+    tip.style.left = left + "px"; tip.style.top = top + "px";
+  }
+
+  function hide(){
+    tip.style.display = "none";
+    guide.setAttribute("opacity", "0");
+    dots.forEach(function(d){ d.setAttribute("opacity", "0"); });
+  }
+
+  svgEl.addEventListener("mousemove", function(e){ showAt(e.clientX, e.clientY); });
+  svgEl.addEventListener("mouseleave", hide);
+  svgEl.addEventListener("touchstart", function(e){
+    if (e.touches[0]) showAt(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive:true });
+  svgEl.addEventListener("touchmove", function(e){
+    if (e.touches[0]){ e.preventDefault(); showAt(e.touches[0].clientX, e.touches[0].clientY); }
+  }, { passive:false });
+  svgEl.addEventListener("touchend", hide);
+
+  $("lineLegend").innerHTML = models.map(function(m, i){
+    return '<span><i class="swatch" style="background:'+COLORS[i % COLORS.length]+'"></i>' +
+      esc(state.scenarios[i].name) + (m.offset > 0 ? ' <span style="color:var(--muted)">(ab Jahr '+m.offset+')</span>' : '') +
+      '</span>';
+  }).join("");
+
+  $("lineNote").textContent = hasOffsets
+    ? "Jahr 0 ist der gemeinsame Startpunkt. Linien mit Startpunkt beginnen sp\u00e4ter \u2013 gestrichelt markiert."
+    : "Jahr 0 ist der gemeinsame Startpunkt aller Szenarien.";
+}
+
+function stackChart(rows){
+  var W = 720, H = 240, padL = 58, padR = 10, padT = 12, padB = 26;
+  var n = rows.length, iw = W - padL - padR, ih = H - padT - padB;
+  var gap = n > 24 ? 1 : (n > 12 ? 2 : 4);
+  var bw = Math.max(2, iw / n - gap);
+  var max = 0;
+  rows.forEach(function(r){ max = Math.max(max, r.monthly + r.kidsM + r.spesenM); });
+  var step = max > 12000 ? 4000 : (max > 6000 ? 2000 : 1000);
+  var top = Math.ceil(max * 1.05 / step) * step || step;
+  var sc = function(v){ return v / top * ih; };
+
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Zusammensetzung des Monatslohns">';
+  for (var g = 0; g <= top; g += step){
+    var yy = padT + ih - sc(g);
+    s += '<line x1="'+padL+'" y1="'+yy.toFixed(1)+'" x2="'+(W-padR)+'" y2="'+yy.toFixed(1)+
+         '" stroke="'+(g===0?'#16181D':'#E2E5EA')+'"/>' +
+         '<text x="'+(padL-8)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="#646C78">'+fmt(g)+'</text>';
+  }
+  var cols = ["var(--c-basis)","var(--c-erf)","var(--c-qual)","var(--c-treue)","var(--c-kind)","var(--c-spesen)"];
+  var every = Math.ceil(n / 12);
+  rows.forEach(function(r, i){
+    var x = padL + i * (iw / n) + gap / 2, acc = 0;
+    [r.basis, r.erf, r.qual, r.treue, r.kidsM, r.spesenM].forEach(function(v, k){
+      if (v <= 0) return;
+      var h = sc(v), yy = padT + ih - sc(acc) - h;
+      s += '<rect x="'+x.toFixed(1)+'" y="'+yy.toFixed(1)+'" width="'+bw.toFixed(1)+
+           '" height="'+Math.max(0.5,h).toFixed(1)+'" fill="'+cols[k]+'"/>';
+      acc += v;
+    });
+    if (i % every === 0 || i === n-1)
+      s += '<text x="'+(x+bw/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10.5" fill="#646C78">'+r.y+'</text>';
+  });
+  s += '</svg>';
+  $("stackChart").innerHTML = s;
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"]/g, function(m){
+    return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[m];
+  });
+}
+
+// ---------------- render ----------------
+function renderChips(){
+  var h = "";
+  state.scenarios.forEach(function(c, i){
+    h += '<span class="chip'+(i===state.active?' on':'')+'" data-i="'+i+'" role="button" tabindex="0">' +
+         '<i class="dot" style="background:'+COLORS[i%COLORS.length]+'"></i>'+esc(c.name);
+    if (state.scenarios.length > 1) h += '<button class="x" data-del="'+i+'" title="Szenario entfernen">\u00d7</button>';
+    h += '</span>';
+  });
+  $("chips").innerHTML = h;
+  $("scCount").textContent = state.scenarios.length + " von 6";
+  $("addBtn").disabled = state.scenarios.length >= 6;
+}
+
+function renderCompare(models){
+  var base = models[0], n = models.length;
+  var maxGrand = Math.max.apply(null, models.map(function(m){ return m.grand; }));
+
+  var head = "<thead><tr><th></th>";
+  state.scenarios.forEach(function(c, i){
+    head += '<th><span class="dot" style="background:'+COLORS[i%COLORS.length]+'"></span>'+esc(c.name)+'</th>';
+  });
+  head += "</tr></thead>";
+
+  function row(label, get, cls){
+    var r = '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+label+'</td>';
+    models.forEach(function(m){ r += "<td>" + get(m) + "</td>"; });
+    return r + "</tr>";
+  }
+
+  var body = "<tbody>";
+  body += row("Jahre", function(m){ return m.N; });
+  body += row("Monatslohn Jahr 1", function(m){ return fmt(m.first); });
+  body += row("Monatslohn letztes Jahr", function(m){ return fmt(m.last); });
+  body += row("\u00d8 Monatslohn", function(m){ return fmt(m.avg); });
+  body += row("Lohn total", function(m){ return fmt(m.tot.salary); });
+  body += row("Spesen total", function(m){ return fmt(m.tot.spesen); });
+  body += row("Kinderzulagen total", function(m){ return fmt(m.tot.kids); });
+  body += '<tr class="total"><td>Ausbezahlt total</td>';
+  models.forEach(function(m, i){
+    body += "<td>" + fmt(m.grand) +
+      '<div class="barcell" style="background:'+COLORS[i%COLORS.length]+
+      ';width:'+(maxGrand ? (m.grand/maxGrand*100) : 0).toFixed(1)+'%"></div></td>';
+  });
+  body += "</tr>";
+  if (n > 1){
+    body += '<tr class="delta"><td>Differenz zu \u00ab'+esc(state.scenarios[0].name)+'\u00bb</td>';
+    models.forEach(function(m, i){
+      body += "<td>" + (i === 0 ? "\u2013" : signed(m.grand - base.grand)) + "</td>";
+    });
+    body += "</tr>";
+  }
+  body += "</tbody>";
+  $("cmpTable").innerHTML = head + body;
+
+  var spans = models.map(function(m){ return m.N; });
+  var same = spans.every(function(v){ return v === spans[0]; });
+  $("cmpNote").textContent = same ? "gleiche Laufzeit" : "unterschiedliche Laufzeiten \u2013 Totale nicht direkt vergleichbar";
+}
+
+function renderDetail(m, c){
+  $("detailHead").textContent = "Detail \u2013 " + c.name;
+  $("yrHead").textContent = "Jahr f\u00fcr Jahr \u2013 " + c.name;
+  $("detailSplit").innerHTML =
+    '<div><span class="k">Ausbezahlt total</span><span class="v">'+fmt(m.grand)+'</span></div>' +
+    '<div><span class="k">Lohn</span><span class="v">'+fmt(m.tot.salary)+'</span></div>' +
+    '<div><span class="k">Spesen</span><span class="v">'+fmt(m.tot.spesen)+'</span></div>' +
+    '<div><span class="k">Kinderzulagen</span><span class="v">'+fmt(m.tot.kids)+'</span></div>';
+
+  stackChart(m.rows);
+  var l = m.rows[m.N-1];
+  $("stackNote").textContent = "Im Jahr " + m.N + ": CHF " + fmt(l.monthly + l.kidsM + l.spesenM) +
+    " pro Monat inklusive Zulage und Spesen.";
+
+  var h = '<thead><tr><th>Jahr</th><th>Basis</th><th>Erfahrung</th><th>Qualifikation</th><th>Firmentreue</th>' +
+          '<th>Monatslohn</th><th>Lohn / Jahr</th><th>Spesen</th><th>Kinder</th><th>Kumuliert</th>' +
+          '<th style="text-align:left">Ereignis</th></tr></thead><tbody>';
+  m.rows.forEach(function(r){
+    h += '<tr><td class="'+(r.events?'mark':'')+'"><strong>'+r.y+'</strong></td>' +
+      '<td class="dim">'+fmt(r.basis)+'</td><td>'+fmt(r.erf)+'</td><td>'+fmt(r.qual)+'</td><td>'+fmt(r.treue)+'</td>' +
+      '<td class="strong">'+fmt(r.monthly)+'</td><td>'+fmt(r.salaryY)+'</td>' +
+      '<td class="dim">'+fmt(r.spesenY)+'</td><td class="dim">'+fmt(r.kidsY)+'</td>' +
+      '<td class="strong">'+fmt(r.cum)+'</td><td class="events">'+esc(r.events)+'</td></tr>';
+  });
+  h += '</tbody><tfoot><tr><td>Total</td><td></td><td></td><td></td><td></td><td></td>' +
+       '<td>'+fmt(m.tot.salary)+'</td><td>'+fmt(m.tot.spesen)+'</td><td>'+fmt(m.tot.kids)+'</td>' +
+       '<td>'+fmt(m.grand)+'</td><td></td></tr></tfoot>';
+  $("yrTable").innerHTML = h;
+}
+
+function render(){
+  var c = state.scenarios[state.active];
+  $("extraYearsSlider").value = state.extraYears;
+  $("extraYearsVal").textContent = state.extraYears;
+  var models = state.scenarios.map(function(c){ return compute(c, state.extraYears); });
+  renderChips();
+  fillForm();
+  renderCompare(models);
+  lineChart(models, state.mode);
+  renderDetail(models[state.active], c);
+
+  $("assumptions").innerHTML =
+    "<b>Annahmen.</b> Lohn " + c.pSalMonths + "\u00d7 pro Jahr, Spesen " + c.pSpesenMonths +
+    "\u00d7, Kinderzulagen " + c.pKindMonths + "\u00d7. Abschl\u00fcsse z\u00e4hlen ab dem Jahr nach Studienende. " +
+    "Erfahrung und Firmentreue basieren auf " +
+    (c.counting === "current" ? "dem laufenden Jahr" : "abgeschlossenen Jahren") +
+    ". Bruttobetr\u00e4ge ohne Sozialabz\u00fcge und ohne Arbeitgeberbeitr\u00e4ge." +
+    (state.sync ? "" : " Die Formel-Parameter sind pro Szenario unterschiedlich gesetzt.") +
+    (state.extraYears > 0 ? " Jedes Szenario wird um " + state.extraYears +
+      (state.extraYears === 1 ? " zus\u00e4tzliches Jahr" : " zus\u00e4tzliche Jahre") +
+      " \u00fcber seine eigene Berechnungsdauer hinaus fortgeschrieben." : "");
+
+  writeHash();
+}
+
+// ---------------- events ----------------
+$("chips").addEventListener("click", function(e){
+  var del = e.target.closest("[data-del]");
+  if (del){
+    e.stopPropagation();
+    var i = +del.dataset.del;
+    state.scenarios.splice(i, 1);
+    if (state.active >= state.scenarios.length) state.active = state.scenarios.length - 1;
+    render(); return;
+  }
+  var chip = e.target.closest(".chip");
+  if (chip){ state.active = +chip.dataset.i; render(); }
+});
+$("chips").addEventListener("keydown", function(e){
+  var chip = e.target.closest(".chip");
+  if (chip && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); state.active = +chip.dataset.i; render(); }
+});
+
+$("addBtn").addEventListener("click", function(){
+  if (state.scenarios.length >= 6) return;
+  var base = state.sync ? state.scenarios[state.active] : null;
+  var s = newScenario("Szenario " + (state.scenarios.length + 1));
+  if (base) PARAM_KEYS.forEach(function(k){ s[k] = base[k]; });
+  state.scenarios.push(s);
+  state.active = state.scenarios.length - 1;
+  render();
+});
+
+$("dupBtn").addEventListener("click", function(){
+  if (state.scenarios.length >= 6) return;
+  var c = state.scenarios[state.active];
+  state.scenarios.push(newScenario(c.name + " (Kopie)", c));
+  state.active = state.scenarios.length - 1;
+  render();
+});
+
+$("scName").addEventListener("input", function(){
+  state.scenarios[state.active].name = this.value || "Ohne Namen";
+  renderChips();
+  var models = state.scenarios.map(function(c){ return compute(c, state.extraYears); });
+  renderCompare(models); lineChart(models, state.mode);
+  writeHash();
+});
+
+$("syncParams").addEventListener("change", function(){
+  state.sync = this.checked;
+  if (state.sync){
+    var c = state.scenarios[state.active];
+    state.scenarios.forEach(function(s){ PARAM_KEYS.forEach(function(k){ s[k] = c[k]; }); });
+  }
+  render();
+});
+
+$("resetBtn").addEventListener("click", function(){
+  var d = blank(), c = state.scenarios[state.active];
+  PARAM_KEYS.forEach(function(k){ c[k] = d[k]; });
+  if (state.sync) state.scenarios.forEach(function(s){ PARAM_KEYS.forEach(function(k){ s[k] = d[k]; }); });
+  render();
+});
+
+$("modeSeg").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return;
+  state.mode = b.dataset.mode;
+  Array.prototype.forEach.call(this.children, function(x){ x.classList.toggle("on", x === b); });
+  lineChart(state.scenarios.map(function(c){ return compute(c, state.extraYears); }), state.mode);
+  writeHash();
+});
+
+$("extraYearsSlider").addEventListener("input", function(){
+  state.extraYears = parseInt(this.value, 10);
+  $("extraYearsVal").textContent = state.extraYears;
+  render();
+});
+
+function toast(msg){
+  var t = $("toast"); t.textContent = msg; t.classList.add("show");
+  setTimeout(function(){ t.classList.remove("show"); }, 1800);
+}
+
+$("shareBtn").addEventListener("click", function(){
+  writeHash();
+  var url = location.href;
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(
+      function(){ toast("Link kopiert \u2013 enth\u00e4lt alle Szenarien"); },
+      function(){ window.prompt("Link kopieren:", url); }
+    );
+  } else window.prompt("Link kopieren:", url);
+});
+
+// ---------------- go ----------------
+buildForms();
+initState();
+Array.prototype.forEach.call($("modeSeg").children, function(x){
+  x.classList.toggle("on", x.dataset.mode === state.mode);
+});
+render();
+})();
+</script>
+</body>
+</html>
