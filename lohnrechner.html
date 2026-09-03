@@ -17,7 +17,6 @@
     --c-erf:#EE7B32;
     --c-qual:#F5A45E;
     --c-treue:#FAC79A;
-    --c-kind:#57CBB4;
     --c-spesen:#9AA3B0;
   }
   *{box-sizing:border-box}
@@ -51,6 +50,9 @@
   .bonusInputWrap{display:flex;align-items:center;gap:6px;margin-left:auto}
   .bonusPrefix{font-size:13px;color:var(--muted)}
   #bonusPoolInput{width:130px;font-size:18px;font-weight:700;letter-spacing:-.01em;text-align:right}
+  .alignToggle{display:flex;align-items:flex-start;gap:9px;cursor:pointer}
+  .alignToggle input{margin-top:3px;flex:none}
+  .alignToggle .simSub{max-width:60ch}
   .simValue{flex:none;display:flex;align-items:baseline;gap:6px;font-size:24px;font-weight:700;
     letter-spacing:-.02em;min-width:90px;justify-content:flex-end}
   .simValue .unit{font-size:12px;font-weight:400;color:var(--muted)}
@@ -116,6 +118,63 @@
   table.cmp-t tr.total td:first-child{font-size:13px;font-weight:400;color:var(--ink)}
   table.cmp-t tr.delta td{border-bottom:0;font-size:13px;padding-top:2px;color:var(--muted)}
   .barcell{height:4px;border-radius:2px;margin-top:6px}
+  #formulaPanel .formulaGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:820px){#formulaPanel .formulaGrid{grid-template-columns:1fr}}
+  .fCard{border:1px solid var(--line);border-radius:8px;padding:13px 15px;background:#FBFBFC;opacity:.55}
+  .fCard.on{opacity:1;background:#fff;border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+  .fCard h3{margin:0 0 8px;font-size:14px;font-weight:700}
+  .fCard code{display:block;font-size:12.5px;background:#F1F3F6;border-radius:5px;padding:7px 9px;
+    margin-bottom:9px;line-height:1.5;font-family:ui-monospace,Menlo,Consolas,monospace}
+  .fCard ul{margin:0 0 9px;padding-left:17px;font-size:13px;line-height:1.55}
+  .fCard li{margin-bottom:3px}
+  .fCard .fnote{margin:0;font-size:12.5px;color:var(--muted);line-height:1.5}
+  #formulaPanel h2{display:flex;justify-content:space-between;align-items:center}
+
+  .fill{color:var(--accent);font-size:11.5px;font-weight:600}
+  .capped{color:#12805C;font-weight:700;cursor:help}
+  table.cmp-t tr.spanrow td{font-weight:600}
+  table.cmp-t tr.sub td{color:var(--muted)}
+  table.cmp-t tr.sub td:first-child{padding-left:22px}
+  table.cmp-t th[title]{cursor:help}
+
+  th.visCol,td.visCol{width:26px;padding-left:10px;padding-right:0;text-align:center}
+  table.cmp-t .vis{border:0;background:none;font:inherit;font-size:11px;line-height:1;
+    color:var(--muted);cursor:pointer;padding:2px}
+  table.cmp-t .vis:hover{color:var(--ink)}
+  table.cmp-t tr.ishidden td{color:#A8AEB8;background:#FBFBFC;cursor:default}
+  table.cmp-t tr.ishidden td:first-child .vis{color:var(--accent)}
+  table.cmp-t tr.ishidden:hover td{background:#F5F6F8}
+  table.cmp-t tr.ishidden .dot{filter:grayscale(1);opacity:.6}
+  table.cmp-t th .vis{margin-right:2px}
+
+  .chip .vis{border:0;background:none;font:inherit;font-size:11px;line-height:1;color:var(--muted);
+    cursor:pointer;padding:0 1px 0 0}
+  .chip .vis:hover{color:var(--ink)}
+  .chip.off{opacity:.5}
+  .chip.off .dot{filter:grayscale(1)}
+  .chip.base{box-shadow:inset 0 0 0 2px var(--accent)}
+  .basetag{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);
+    font-weight:700;margin-left:6px}
+  .baselinePick{display:inline-flex;align-items:center;gap:7px;font-weight:400}
+  .baselinePick label{font-size:12px;color:var(--muted)}
+  .baselinePick select{font-size:13px;padding:4px 7px;max-width:190px}
+  p.cmpNote{margin:0 0 12px;font-size:12.5px;color:var(--muted)}
+  table.cmp-t td.up,.chart-tooltip .ttdiff.up{color:#12805C}
+  table.cmp-t td.down,.chart-tooltip .ttdiff.down{color:#C2334A}
+  table.cmp-t tr.isbase td,table.cmp-t th.isbase{background:#FFF6F6}
+  table.cmp-t tr.cmp-row.isbase td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+  .chart-tooltip .ttdiff{margin-left:10px;font-size:11.5px;font-variant-numeric:tabular-nums}
+  .chart-tooltip .ttdiff.base{color:#A8AEB8}
+  .legend .lg{cursor:pointer}
+  .legend .lg.cur{font-weight:700}
+
+  table.cmp-t tr.cmp-row{cursor:pointer}
+  table.cmp-t tr.cmp-row:hover td{background:#F7F8FA}
+  table.cmp-t tr.cmp-row.on td{background:#F0F3FA;font-weight:600}
+  table.cmp-t tr.cmp-row.on td:first-child{box-shadow:inset 3px 0 0 var(--ink)}
+  table.cmp-t td.dim{color:var(--muted);font-weight:400}
+  .chips{max-height:168px;overflow-y:auto}
+  .legend{max-height:96px;overflow-y:auto}
 
   .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:7px;overflow:hidden}
   .seg button{font:inherit;font-size:12.5px;background:#fff;border:0;padding:5px 11px;cursor:pointer;color:#3d434d}
@@ -136,6 +195,9 @@
   .chart-tooltip .ttrow .ttname{color:#C7CBD3}
   .chart-tooltip .ttrow .ttval{margin-left:14px;font-weight:600;font-variant-numeric:tabular-nums}
   .chart-tooltip .ttrow.off{opacity:.45}
+  .chart-tooltip .ttrow.cur .ttname{color:#fff;font-weight:600}
+  .chart-tooltip .ttmore{margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.2);
+    font-size:11.5px;color:#A8AEB8}
   .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:#3d434d;margin-top:11px}
   .swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
   .chart-note{font-size:12.5px;color:var(--muted);margin:10px 0 0}
@@ -180,6 +242,37 @@
     </div>
   </header>
 
+  <section class="panel" id="formulaPanel">
+    <h2>Lohnformel
+      <span class="seg" id="formulaSeg">
+        <button type="button" data-f="original" class="on">Original</button>
+        <button type="button" data-f="concave">Vorschlag</button>
+      </span>
+    </h2>
+    <div class="formulaGrid">
+      <div class="fCard" id="fcardOriginal">
+        <h3>Original · linear</h3>
+        <code>Lohn = Basis + Erfahrung + Ausbildung + Firmentreue</code>
+        <ul>
+          <li><b>Erfahrung</b> 150.–/Jahr, extern max 1'500.–, total max 3'000.–</li>
+          <li><b>Ausbildung</b> feste Beträge: EFZ 200, HF 500, Bachelor 750, Master 500, CAS/MAS max 200 · total max 1'000.–</li>
+          <li><b>Firmentreue</b> 25.–/internes Jahr</li>
+        </ul>
+        <p class="fnote">Alle Teile wachsen linear. Zwei Laufbahnen bleiben dauerhaft parallel: Wer nach 10 Jahren 225.– vorn liegt, liegt auch nach 30 Jahren 225.– vorn.</p>
+      </div>
+      <div class="fCard" id="fcardConcave">
+        <h3>Vorschlag · konkave Kurve</h3>
+        <code>Erfahrung(n) = Emax × (1 − r<sup>n</sup>)<br>n = Arbeitsjahre + angerechnete Ausbildungsjahre</code>
+        <ul>
+          <li><b>Ausbildung</b> zählt als Jahre statt Franken: EFZ 1.5, HF 3, Bachelor 4.5, Master +3, CAS 0.3, MAS 1.0</li>
+          <li><b>Erfahrung</b> strebt Emax zu; jedes weitere Jahr bringt weniger</li>
+          <li><b>Firmentreue</b> unverändert 25.–/internes Jahr</li>
+        </ul>
+        <p class="fnote">Ein Abschluss startet höher, weil er weiter vorn auf der Kurve einsteigt – und flacht schneller ab, weil dort die Zuwächse kleiner sind. Mit r = 0.86 treffen sich die Kurven nach rund 15 Jahren.</p>
+      </div>
+    </div>
+  </section>
+
   <section class="panel" id="simPanel">
     <div class="simRow">
       <div class="simLabels">
@@ -199,6 +292,34 @@
         <input type="number" id="bonusPoolInput" min="0" step="1000" value="0">
       </div>
     </div>
+    <div class="simRow simRow2">
+      <label class="alignToggle">
+        <input type="checkbox" id="capRetireToggle" checked>
+        <span>
+          <span class="simLabel">Bei Pensionierung stoppen</span>
+          <span class="simSub">Simulierte Jahre enden mit AHV-Alter 65 – niemand verdient darüber hinaus weiter</span>
+        </span>
+      </label>
+      <button class="btn" id="toRetireBtn" type="button" title="Jede Person bis zu ihrer eigenen Pensionierung rechnen">Bis AHV rechnen</button>
+    </div>
+    <div class="simRow simRow2">
+      <label class="alignToggle">
+        <input type="checkbox" id="equalizeToggle">
+        <span>
+          <span class="simLabel">Gleiches Berufsalter simulieren</span>
+          <span class="simSub">Alle werden mit internen Jahren auf die längste sichtbare Laufbahn aufgefüllt; externe Jahre bleiben unverändert</span>
+        </span>
+      </label>
+    </div>
+    <div class="simRow simRow2">
+      <label class="alignToggle">
+        <input type="checkbox" id="alignEndToggle" checked>
+        <span>
+          <span class="simLabel">Auf heute ausrichten</span>
+          <span class="simSub">Alle Linien enden heute; der Start ergibt sich rückwärts aus externen plus internen Jahren</span>
+        </span>
+      </label>
+    </div>
   </section>
 
   <div class="grid">
@@ -211,6 +332,8 @@
         <div class="btnrow">
           <button class="btn solid" id="addBtn" type="button">Neues Szenario</button>
           <button class="btn" id="dupBtn" type="button">Duplizieren</button>
+          <button class="btn" id="showAllBtn" type="button">Alle einblenden</button>
+          <button class="btn" id="onlyActiveBtn" type="button">Nur aktives</button>
         </div>
       </section>
 
@@ -246,7 +369,13 @@
     <!-- ============ RIGHT: RESULTS ============ -->
     <div>
       <section class="panel">
-        <h2>Vergleich <span class="note" id="cmpNote"></span></h2>
+        <h2>Vergleich
+          <span class="baselinePick">
+            <label for="baselineSelect">Referenz</label>
+            <select id="baselineSelect"></select>
+          </span>
+        </h2>
+        <p class="note cmpNote" id="cmpNote"></p>
         <div class="cmp"><table class="cmp-t" id="cmpTable"></table></div>
       </section>
 
@@ -275,7 +404,6 @@
             <span><i class="swatch" style="background:var(--c-erf)"></i>Erfahrung</span>
             <span><i class="swatch" style="background:var(--c-qual)"></i>Qualifikation</span>
             <span><i class="swatch" style="background:var(--c-treue)"></i>Firmentreue</span>
-            <span><i class="swatch" style="background:var(--c-kind)"></i>Kinderzulage</span>
             <span><i class="swatch" style="background:var(--c-spesen)"></i>Spesen</span>
           </div>
           <p class="chart-note" id="stackNote"></p>
@@ -307,7 +435,22 @@ function fmt(n){
 }
 function signed(n){ return (n > 0 ? "+" : n < 0 ? "−" : "±") + fmt(Math.abs(n)); }
 
-var COLORS = ["#2F5FE0","#E0672F","#12A594","#8B5CF6","#D8232A","#A8801F"];
+var MAX_SCENARIOS = 40;
+var TODAY_YEAR = new Date().getFullYear();
+var TODAY_ABS = null;   // axis index of "today", set by alignToEnd
+var BASE_COLORS = ["#2F5FE0","#E0672F","#12A594","#8B5CF6","#D8232A","#A8801F"];
+// Beyond the hand-picked palette, walk the hue circle by the golden angle so
+// even 30+ scenarios stay visually distinguishable.
+var COLOR_CACHE = {};
+function colorFor(i){
+  if (i < BASE_COLORS.length) return BASE_COLORS[i];
+  if (COLOR_CACHE[i]) return COLOR_CACHE[i];
+  var k = i - BASE_COLORS.length;
+  var hue = (k * 137.508 + 20) % 360;
+  var sat = 62 + (k % 3) * 9;
+  var light = 38 + (k % 4) * 7;
+  return (COLOR_CACHE[i] = "hsl(" + hue.toFixed(0) + "," + sat + "%," + light + "%)");
+}
 
 // ---------------- field schema ----------------
 var CAREER = [
@@ -315,11 +458,8 @@ var CAREER = [
   {k:"externBefore",t:"num", def:0,  min:0,  max:45, step:0.5, label:"Externe Erfahrung bei Eintritt", sub:"Jahre vor dem Unternehmen – verschiebt auch den Start im Verlauf"},
   {k:"startOffset", t:"num", def:0,  min:0,  max:45, step:1,   label:"Zusätzlicher Startpunkt", sub:"Weitere Jahre zuvor ohne Erfahrungsanrechnung, z. B. Vollzeitstudium ohne Job"},
   {k:"internBefore",t:"num", def:0,  min:0,  max:45, step:0.5, label:"Bereits im Unternehmen",     sub:"Jahre, falls schon angestellt"},
-  {k:"pensum",      t:"num", def:100,min:10, max:100,step:5,   label:"Pensum",                     sub:"Prozent"},
   {k:"counting",    t:"sel", def:"completed", label:"Anrechnung der Jahre",
-     opts:[["completed","Abgeschlossene Jahre"],["current","Laufendes Jahr zählt mit"]]},
-  {k:"kids",        t:"num", def:0,  min:0,  max:12, step:1,   label:"Kinder", sub:"Anzahl"},
-  {k:"kidsFrom",    t:"num", def:1,  min:1,  max:45, step:1,   label:"Kinderzulage ab Jahr"}
+     opts:[["completed","Abgeschlossene Jahre"],["current","Laufendes Jahr zählt mit"]]}
 ];
 
 var MODE3 = [["none","keine"],["have","bei Eintritt vorhanden"],["during","Abschluss im Jahr"]];
@@ -356,29 +496,39 @@ var EDU = [
 
 var PARAMS = [
   {h:"Basis"},
-  {k:"pBasis",  t:"num", def:5400, step:50,  label:"Grundlohn pro Monat"},
+  {k:"pBasis",  t:"num", def:5500, step:50,  label:"Grundlohn pro Monat"},
   {k:"pSpesen", t:"num", def:100,  step:10,  label:"Pauschale Spesen pro Monat"},
-  {h:"Erfahrung"},
-  {k:"pExtRate",t:"num", def:150,  step:10,  label:"Extern pro Jahr"},
-  {k:"pExtCap", t:"num", def:1500, step:100, label:"Extern maximal"},
-  {k:"pIntRate",t:"num", def:150,  step:10,  label:"Intern pro Jahr"},
-  {k:"pErfCap", t:"num", def:3000, step:100, label:"Erfahrung total maximal"},
-  {h:"Qualifikation"},
-  {k:"pEfz",    t:"num", def:200,  step:50,  label:"EFZ"},
-  {k:"pHf",     t:"num", def:500,  step:50,  label:"HF"},
-  {k:"pBa",     t:"num", def:750,  step:50,  label:"Bachelor"},
-  {k:"pMa",     t:"num", def:500,  step:50,  label:"Master"},
-  {k:"pCas",    t:"num", def:50,   step:10,  label:"CAS je Abschluss"},
-  {k:"pMas",    t:"num", def:200,  step:10,  label:"MAS je Abschluss"},
-  {k:"pCasMasCap",t:"num",def:200, step:50,  label:"CAS + MAS maximal"},
-  {k:"pQualCap",t:"num", def:1000, step:100, label:"Qualifikation total maximal"},
-  {h:"Firmentreue und Kinder"},
+  {h:"Erfahrung", m:"original"},
+  {k:"pExtRate",t:"num", def:150,  step:10,  label:"Extern pro Jahr", m:"original"},
+  {k:"pExtCap", t:"num", def:1500, step:100, label:"Extern maximal", m:"original"},
+  {k:"pIntRate",t:"num", def:150,  step:10,  label:"Intern pro Jahr", m:"original"},
+  {k:"pErfCap", t:"num", def:3000, step:100, label:"Erfahrung total maximal", m:"original"},
+  {h:"Qualifikation", m:"original"},
+  {k:"pEfz",    t:"num", def:200,  step:50,  label:"EFZ", m:"original"},
+  {k:"pHf",     t:"num", def:500,  step:50,  label:"HF", m:"original"},
+  {k:"pBa",     t:"num", def:750,  step:50,  label:"Bachelor", m:"original"},
+  {k:"pMa",     t:"num", def:500,  step:50,  label:"Master", m:"original"},
+  {k:"pCas",    t:"num", def:50,   step:10,  label:"CAS je Abschluss", m:"original"},
+  {k:"pMas",    t:"num", def:200,  step:10,  label:"MAS je Abschluss", m:"original"},
+  {k:"pCasMasCap",t:"num",def:200, step:50,  label:"CAS + MAS maximal", m:"original"},
+  {k:"pQualCap",t:"num", def:1000, step:100, label:"Qualifikation total maximal", m:"original"},
+
+  {h:"Konkave Kurve", m:"concave"},
+  {k:"pEmax",   t:"num", def:4000, step:100, label:"Maximale Erfahrungszulage", sub:"Emax – Obergrenze, der die Kurve zustrebt", m:"concave"},
+  {k:"pDecay",  t:"num", def:0.86, min:0.5, max:0.99, step:0.01, label:"Abklingfaktor r", sub:"Kleiner = schnellere Annäherung", m:"concave"},
+  {h:"Angerechnete Ausbildungsjahre", m:"concave"},
+  {k:"cEfz",    t:"num", def:1.5,  min:0, max:15, step:0.5, label:"EFZ", m:"concave"},
+  {k:"cHf",     t:"num", def:3,    min:0, max:15, step:0.5, label:"HF", m:"concave"},
+  {k:"cBa",     t:"num", def:4.5,  min:0, max:15, step:0.5, label:"Bachelor", m:"concave"},
+  {k:"cMa",     t:"num", def:3,    min:0, max:15, step:0.5, label:"Master", m:"concave"},
+  {k:"cCas",    t:"num", def:0.3,  min:0, max:5,  step:0.1, label:"CAS je Abschluss", m:"concave"},
+  {k:"cMas",    t:"num", def:1.0,  min:0, max:5,  step:0.1, label:"MAS je Abschluss", m:"concave"},
+  {k:"cCasMasCap",t:"num",def:1.0, min:0, max:5,  step:0.1, label:"CAS + MAS maximal", m:"concave"},
+  {h:"Firmentreue"},
   {k:"pTreue",  t:"num", def:25,   step:5,   label:"Firmentreue pro Jahr"},
-  {k:"pKind",   t:"num", def:300,  step:50,  label:"Zulage pro Kind und Monat"},
   {h:"Auszahlung"},
   {k:"pSalMonths",   t:"num", def:13, min:12, max:14, step:1, label:"Lohnzahlungen pro Jahr"},
   {k:"pSpesenMonths",t:"num", def:12, min:12, max:14, step:1, label:"Spesenzahlungen pro Jahr"},
-  {k:"pKindMonths",  t:"num", def:12, min:12, max:14, step:1, label:"Kinderzulagen pro Jahr"},
   {k:"pTeuerung",    t:"num", def:0,  min:0,  max:10, step:0.1,label:"Teuerungsausgleich pro Jahr in Prozent"}
 ];
 
@@ -393,41 +543,99 @@ function blank(){
 }
 
 // ---------------- state ----------------
-var state = { active:0, sync:true, mode:"cum", extraYears:0, bonusPool:0, showEditor:false, scenarios:[] };
+var state = { active:0, baseline:0, formula:"original", capRetire:true, sync:true, mode:"cum", extraYears:0, bonusPool:0, alignEnd:true, equalize:false, showEditor:false, scenarios:[] };
 
 function newScenario(name, base){
   var c = base ? JSON.parse(JSON.stringify(base)) : blank();
   c.name = name;
+  c.hidden = false;
   return c;
 }
+
+// Toggle one scenario's visibility, keeping selection valid and never
+// letting the last visible scenario disappear.
+function toggleVis(i){
+  var sc = state.scenarios[i];
+  if (!sc.hidden && visibleCount() <= 1) return;
+  sc.hidden = !sc.hidden;
+  if (sc.hidden && i === state.active){
+    for (var k = 0; k < state.scenarios.length; k++)
+      if (!state.scenarios[k].hidden){ state.active = k; break; }
+  }
+  render();
+}
+
+function visibleCount(){
+  return state.scenarios.filter(function(c){ return !c.hidden; }).length;
+}
+
+// The model for a given scenario index, or null when it is hidden.
+function modelFor(models, idx){
+  for (var i = 0; i < models.length; i++) if (models[i].idx === idx) return models[i];
+  return null;
+}
+
+var EMPLOYEES = [
+  {n:"Thilo Haas",y:14,cur:1,e:4,efz:0,hf:0,ba:1,ma:1,cas:0,mas:0,ry:2053,rest:26},
+  {n:"Thomas Moser",y:8,cur:1,e:14,efz:0,hf:0,ba:1,ma:1,cas:0,mas:0,ry:2047,rest:20},
+  {n:"Peter Manser",y:14,cur:1,e:3,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2053,rest:27},
+  {n:"Dominique Wirz",y:10,cur:1,e:7,efz:1,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2051,rest:25},
+  {n:"Marco Bohler",y:12,cur:1,e:5,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2051,rest:24},
+  {n:"Moreno Feltscher",y:12,cur:1,e:4,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2053,rest:26},
+  {n:"Mirco Strässle",y:9,cur:1,e:7,efz:1,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2056,rest:29},
+  {n:"Benjamin Brossi",y:7,cur:1,e:7,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2051,rest:24},
+  {n:"Nicola Marcacci Rossi",y:9,cur:1,e:4,efz:0,hf:0,ba:1,ma:1,cas:0,mas:0,ry:2052,rest:26},
+  {n:"Sabrina Oertle",y:5,cur:1,e:9,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2051,rest:25},
+  {n:"Lorenz Bösch",y:4,cur:1,e:9,efz:1,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2055,rest:28},
+  {n:"Mike Schmid",y:4,cur:1,e:8,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2054,rest:27},
+  {n:"Christian Grutsch",y:3,cur:1,e:14,efz:0,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2048,rest:22},
+  {n:"Josh Wirth",y:8,cur:1,e:7,efz:1,hf:0,ba:0,ma:0,cas:0,mas:0,ry:2056,rest:29},
+  {n:"Nando Schär",y:2,cur:1,e:8,efz:1,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2057,rest:31},
+  {n:"Kevin Walker",y:4,cur:1,e:10,efz:1,hf:0,ba:0,ma:0,cas:1,mas:0,ry:2055,rest:29},
+  {n:"Manuel Mumenthaler",y:1,cur:0,e:10,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2056,rest:29},
+  {n:"Eliane Kunz",y:1,cur:0,e:16,efz:1,hf:1,ba:0,ma:0,cas:0,mas:0,ry:2056,rest:29},
+  {n:"Anna Wyss",y:7,cur:1,e:0,efz:0,hf:0,ba:1,ma:0,cas:2,mas:0,ry:2051,rest:25},
+  {n:"Damian Caduff",y:5,cur:1,e:8,efz:0,hf:0,ba:0,ma:0,cas:0,mas:0,ry:2052,rest:25},
+  {n:"Fabrice Michaud",y:1,cur:0,e:8,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2055,rest:28},
+  {n:"Natàlia Justicia",y:1,cur:0,e:8,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2058,rest:32},
+  {n:"Sarah Schott",y:1,cur:0,e:8,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2060,rest:33},
+  {n:"Raphael Wirth",y:4,cur:1,e:2,efz:1,hf:1,ba:0,ma:0,cas:1,mas:0,ry:2061,rest:34},
+  {n:"Matthias Loser",y:5,cur:1,e:0,efz:0,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2058,rest:32},
+  {n:"Marco Baumgartner",y:4,cur:1,e:1,efz:0,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2059,rest:33},
+  {n:"Céline Salzmann",y:5,cur:1,e:0,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2062,rest:35},
+  {n:"Mauro Quarta",y:5,cur:1,e:1,efz:0,hf:0,ba:0,ma:0,cas:0,mas:0,ry:2058,rest:31},
+  {n:"Adrien Frischknecht",y:1,cur:1,e:0,efz:0,hf:0,ba:0,ma:0,cas:0,mas:0,ry:2055,rest:29}
+];
 
 function initState(){
   var loaded = readHash();
   if (loaded){ state = loaded; return; }
-
-  var s1 = newScenario("Extern 3J + 7J intern");
-  s1.years = 7; s1.externBefore = 3;
-
-  var s2 = newScenario("Bachelor berufsbegl. (10J)");
-  s2.years = 10; s2.baMode = "during"; s2.baFrom = 1; s2.baDur = 3;
-
-  var s3 = newScenario("Bachelor+Master ab Jahr 5");
-  s3.years = 5; s3.startOffset = 5;
-  s3.baMode = "during"; s3.baFrom = 1; s3.baDur = 3;
-  s3.maMode = "during"; s3.maFrom = 4; s3.maDur = 2;
-
-  var s4 = newScenario("Bachelor vorher, 7J ab J3");
-  s4.years = 7; s4.baMode = "have"; s4.startOffset = 3;
-
-  state.scenarios = [s1, s2, s3, s4];
+  // Built from the Mitarbeitende / Ausbildung / Arbeitserfahrung exports.
+  // Interne Jahre come from each person's Start date; "counting: current"
+  // makes year N count N internal years, matching the Notion figures.
+  state.scenarios = EMPLOYEES.map(function(e){
+    var s = newScenario(e.n);
+    s.years = e.y;
+    s.externBefore = e.e;
+    s.counting = e.cur ? "current" : "completed";
+    s.efzMode = e.efz ? "have" : "none";
+    s.hfMode  = e.hf  ? "have" : "none";
+    s.baMode  = e.ba  ? "have" : "none";
+    s.maMode  = e.ma  ? "have" : "none";
+    s.casN = e.cas;
+    s.masN = e.mas;
+    s.retireYear = e.ry;     // AHV start (calendar year)
+    s.maxExtra = e.rest;     // whole working years left until AHV
+    return s;
+  });
   state.active = 0;
 }
 
 // ---------------- URL sharing ----------------
 function writeHash(){
   try{
-    var payload = { a:state.active, s:state.sync, m:state.mode, ey:state.extraYears,
-      bp:state.bonusPool, se:state.showEditor, sc:state.scenarios };
+    var payload = { a:state.active, bl:state.baseline, f:state.formula, s:state.sync, m:state.mode, ey:state.extraYears,
+      bp:state.bonusPool, ae:state.alignEnd, eq:state.equalize, cr:state.capRetire, se:state.showEditor, sc:state.scenarios };
     var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
     history.replaceState(null, "", "#" + b64);
   }catch(e){}
@@ -441,8 +649,9 @@ function readHash(){
     o.sc.forEach(function(c){
       Object.keys(def).forEach(function(k){ if (c[k] === undefined) c[k] = def[k]; });
     });
-    return { active:Math.min(o.a||0,o.sc.length-1), sync:o.s !== false, mode:o.m || "cum",
-      extraYears:o.ey || 0, bonusPool:o.bp || 0, showEditor:o.se === true, scenarios:o.sc };
+    return { active:Math.min(o.a||0,o.sc.length-1), baseline:Math.min(o.bl||0,o.sc.length-1),
+      formula:o.f === "concave" ? "concave" : "original", sync:o.s !== false, mode:o.m || "cum",
+      extraYears:o.ey || 0, bonusPool:o.bp || 0, alignEnd:o.ae !== false, equalize:o.eq === true, capRetire:o.cr !== false, showEditor:o.se === true, scenarios:o.sc };
   }catch(e){ return null; }
 }
 
@@ -453,9 +662,9 @@ function bonusFrom(mode, from, dur){
   return Infinity;
 }
 
-function compute(c, extraYears){
+function compute(c, extraYears, mode){
+  var concave = mode === "concave";
   var N = Math.max(1, Math.min(45, Math.round((+c.years || 1) + (+extraYears || 0))));
-  var pensum = Math.max(0, +c.pensum) / 100;
   var yearOffset = c.counting === "current" ? 1 : 0;
   var teuerung = (+c.pTeuerung || 0) / 100;
 
@@ -464,36 +673,58 @@ function compute(c, extraYears){
   var baFrom  = bonusFrom(c.baMode,  c.baFrom, c.baDur);
   var maFrom  = bonusFrom(c.maMode,  c.maFrom, c.maDur);
   var casN = Math.max(0, +c.casN), masN = Math.max(0, +c.masN);
-  var kids = Math.max(0, +c.kids);
 
   // Years spent externally are valued at today's base salary (no Erfahrung/
   // Qualifikation/Spesen - those are Smartive-specific) and paid into the
   // cumulative total as if that employer used the same payment schedule.
-  var preMonthly = (+c.pBasis) * pensum;
+  var preMonthly = (+c.pBasis);
   var preEarn = Math.max(0, +c.externBefore || 0) * preMonthly * (+c.pSalMonths);
 
   var offsetStudy  = Math.max(0, Math.round(+c.startOffset || 0));
   var offsetExtern = Math.max(0, Math.round(+c.externBefore || 0));
 
-  var rows = [], tot = { salary:0, spesen:0, kids:0, pre:preEarn, bonus:0 }, cum = preEarn;
+  var rows = [], tot = { salary:0, spesen:0, pre:preEarn, bonus:0,
+    basis:0, erf:0, qual:0, treue:0 }, cum = preEarn;
 
   for (var y = 1; y <= N; y++){
     var infl = Math.pow(1 + teuerung, y - 1);
     var internYears = (+c.internBefore) + (y - 1) + yearOffset;
 
-    var ext = Math.min((+c.externBefore) * (+c.pExtRate), +c.pExtCap);
-    var erf = Math.min(ext + internYears * (+c.pIntRate), +c.pErfCap);
+    var erf, qual, ev = [];
+    if (concave){
+      // One concave curve over worked years plus credited education years.
+      // Erfahrung is what the worked years alone are worth; Qualifikation is
+      // the marginal value the education credit adds on top - so the two still
+      // add up exactly and every existing breakdown keeps working.
+      var credit = 0;
+      if (y >= efzFrom) credit += +c.cEfz;
+      if (y >= hfFrom)  credit += +c.cHf;
+      if (y >= baFrom)  credit += +c.cBa;
+      if (y >= maFrom)  credit += +c.cMa;
+      var cmY = 0;
+      if (y >= (+c.casFrom)) cmY += casN * (+c.cCas);
+      if (y >= (+c.masFrom)) cmY += masN * (+c.cMas);
+      credit += Math.min(cmY, +c.cCasMasCap);
 
-    var q = 0, ev = [];
-    if (y >= efzFrom) q += +c.pEfz;
-    if (y >= hfFrom)  q += +c.pHf;
-    if (y >= baFrom)  q += +c.pBa;
-    if (y >= maFrom)  q += +c.pMa;
-    var cm = 0;
-    if (y >= (+c.casFrom)) cm += casN * (+c.pCas);
-    if (y >= (+c.masFrom)) cm += masN * (+c.pMas);
-    q += Math.min(cm, +c.pCasMasCap);
-    var qual = Math.min(q, +c.pQualCap);
+      var Emax = +c.pEmax, r = Math.min(0.999, Math.max(0.01, +c.pDecay));
+      var nWork = Math.max(0, (+c.externBefore || 0)) + internYears;
+      erf  = Emax * (1 - Math.pow(r, nWork));
+      qual = Emax * (1 - Math.pow(r, nWork + credit)) - erf;
+    } else {
+      var ext = Math.min((+c.externBefore) * (+c.pExtRate), +c.pExtCap);
+      erf = Math.min(ext + internYears * (+c.pIntRate), +c.pErfCap);
+
+      var q = 0;
+      if (y >= efzFrom) q += +c.pEfz;
+      if (y >= hfFrom)  q += +c.pHf;
+      if (y >= baFrom)  q += +c.pBa;
+      if (y >= maFrom)  q += +c.pMa;
+      var cm = 0;
+      if (y >= (+c.casFrom)) cm += casN * (+c.pCas);
+      if (y >= (+c.masFrom)) cm += masN * (+c.pMas);
+      q += Math.min(cm, +c.pCasMasCap);
+      qual = Math.min(q, +c.pQualCap);
+    }
 
     if (y === efzFrom) ev.push("EFZ");
     if (y === hfFrom)  ev.push("HF");
@@ -501,29 +732,31 @@ function compute(c, extraYears){
     if (y === maFrom)  ev.push("Master");
     if (casN > 0 && y === +c.casFrom) ev.push(casN + "× CAS");
     if (masN > 0 && y === +c.masFrom) ev.push(masN + "× MAS");
-    if (kids > 0 && y === +c.kidsFrom) ev.push(kids === 1 ? "1 Kind" : kids + " Kinder");
 
     var treue = internYears * (+c.pTreue);
-    var basis = (+c.pBasis) * infl * pensum;
-    var monthly = basis + (erf + qual + treue) * infl * pensum;
+    var basis = (+c.pBasis) * infl;
+    var monthly = basis + (erf + qual + treue) * infl;
 
     var salaryY = monthly * (+c.pSalMonths);
-    var spesenM = (+c.pSpesen) * infl * pensum;
+    var spesenM = (+c.pSpesen) * infl;
     var spesenY = spesenM * (+c.pSpesenMonths);
-    var kidsM   = (y >= +c.kidsFrom ? kids * (+c.pKind) : 0);
-    var kidsY   = kidsM * (+c.pKindMonths);
 
-    tot.salary += salaryY; tot.spesen += spesenY; tot.kids += kidsY;
-    cum += salaryY + spesenY + kidsY;
+tot.salary += salaryY; tot.spesen += spesenY;
+    // Per-component yearly totals; these sum back to tot.salary.
+    tot.basis += basis * (+c.pSalMonths);
+    tot.erf   += erf * infl * (+c.pSalMonths);
+    tot.qual  += qual * infl * (+c.pSalMonths);
+    tot.treue += treue * infl * (+c.pSalMonths);
+    cum += salaryY + spesenY;
 
-    rows.push({ y:y, basis:basis, erf:erf*infl*pensum, qual:qual*infl*pensum, treue:treue*infl*pensum,
-      monthly:monthly, salaryY:salaryY, bonusY:0, spesenY:spesenY, kidsY:kidsY, kidsM:kidsM, spesenM:spesenM,
+    rows.push({ y:y, basis:basis, erf:erf*infl, qual:qual*infl, treue:treue*infl,
+      monthly:monthly, salaryY:salaryY, bonusY:0, spesenY:spesenY, spesenM:spesenM,
       cum:cum, events:ev.join(", ") });
   }
   return { rows:rows, tot:tot, N:N,
     offset:offsetStudy + offsetExtern, offsetStudy:offsetStudy, offsetExtern:offsetExtern,
     preEarn:preEarn, preMonthly:preMonthly,
-    grand:tot.salary + tot.spesen + tot.kids + tot.pre + tot.bonus,
+    grand:tot.salary + tot.spesen + tot.pre + tot.bonus,
     first:rows[0].monthly, last:rows[N-1].monthly, avg:tot.salary / N / (+c.pSalMonths) };
 }
 
@@ -560,18 +793,77 @@ function applyBonusPool(models, pool){
   models.forEach(function(m){
     var cum = m.preEarn, totalBonus = 0;
     m.rows.forEach(function(r){
-      cum += r.salaryY + r.spesenY + r.kidsY + r.bonusY;
+      cum += r.salaryY + r.spesenY + r.bonusY;
       r.cum = cum;
       totalBonus += r.bonusY;
     });
     m.tot.bonus = totalBonus;
-    m.grand = m.tot.salary + m.tot.spesen + m.tot.kids + m.tot.pre + m.tot.bonus;
+    m.grand = m.tot.salary + m.tot.spesen + m.tot.pre + m.tot.bonus;
   });
   return models;
 }
 
+// Anchor every scenario's right edge at the same point (today) and work
+// backwards: a person's earning history is their external years plus their
+// years here, so the longest history starts earliest and everyone else sits
+// at zero until their own start.
+function alignToEnd(models){
+  // Anchor on REAL history only. Simulated years must not shift anybody's past:
+  // people retire at different dates, so their projections legitimately end at
+  // different points while their real careers all end today.
+  var maxRealSpan = 0;
+  models.forEach(function(m){
+    m.realSpan = m.offsetExtern + m.realN;
+    if (m.realSpan > maxRealSpan) maxRealSpan = m.realSpan;
+  });
+  models.forEach(function(m){
+    var lead = maxRealSpan - m.realSpan;
+    m.offsetStudy = lead;                 // no job yet - earns nothing
+    m.offset = lead + m.offsetExtern;     // start here at this employer
+    m.span = m.offsetExtern + m.N;
+  });
+  TODAY_ABS = maxRealSpan - 1;            // where real history ends for everyone
+  return maxRealSpan;
+}
+
+// Working span of a scenario in whole years: external experience plus years
+// at this employer. This is the "Berufsalter" the equalize toggle levels out.
+function spanOf(c){
+  return Math.max(0, Math.round(+c.externBefore || 0)) + Math.max(0, Math.round(+c.years || 0));
+}
+
 function computeAll(){
-  var models = state.scenarios.map(function(c){ return compute(c, state.extraYears); });
+  // Equalize: top every visible person up to the longest visible working span,
+  // adding only internal years - their external years stay untouched.
+  var target = 0;
+  if (state.equalize){
+    state.scenarios.forEach(function(c){
+      if (c.hidden) return;
+      var sp = spanOf(c);
+      if (sp > target) target = sp;
+    });
+  }
+
+  var models = [];
+  state.scenarios.forEach(function(c, i){
+    if (c.hidden) return;
+    // Nobody keeps earning past AHV: cap any simulated years at the years
+    // this person still has before retirement.
+    var fill = state.equalize ? Math.max(0, target - spanOf(c)) : 0;
+    var wanted = state.extraYears + fill;
+    var room = (state.capRetire && c.maxExtra !== undefined) ? Math.max(0, +c.maxExtra) : Infinity;
+    var granted = Math.min(wanted, room);
+    var m = compute(c, granted, state.formula);
+    m.retireYear = c.retireYear;
+    m.capped = wanted - granted;
+    m.idx = i;          // stable index into state.scenarios (colours, selection)
+    m.name = c.name;
+    m.fill = fill;      // internal years added by the equalize toggle
+    m.simYears = granted;                      // simulated, not actually worked
+    m.realN = Math.max(0, m.N - m.simYears);   // count of real years
+    models.push(m);
+  });
+  if (state.alignEnd) alignToEnd(models);
   return applyBonusPool(models, state.bonusPool);
 }
 
@@ -601,12 +893,15 @@ function fieldEl(f){
 function buildRows(list, host){
   list.forEach(function(f){
     if (f.h){
-      var h = document.createElement("h3"); h.textContent = f.h; host.appendChild(h); return;
+      var hd = document.createElement("h3"); hd.textContent = f.h;
+      if (f.m) hd.dataset.formulaMode = f.m;
+      host.appendChild(hd); return;
     }
     var row = document.createElement("div"); row.className = "row";
+    if (f.m) row.dataset.formulaMode = f.m;
     var lab = document.createElement("label"); lab.htmlFor = "f_" + f.k;
     lab.appendChild(document.createTextNode(f.label));
-    if (f.sub){ var s = document.createElement("span"); s.className = "sub"; s.textContent = f.sub; lab.appendChild(s); }
+    if (f.sub){ var s = document.createElement("span"); s.className = "sub"; s.id = "sub_" + f.k; s.textContent = f.sub; lab.appendChild(s); }
     row.appendChild(lab); row.appendChild(fieldEl(f)); host.appendChild(row);
   });
 }
@@ -646,6 +941,13 @@ function fillForm(){
   });
   $("syncParams").checked = state.sync;
   $("editHead").textContent = "Laufbahn – " + c.name;
+
+  var subExtern = $("sub_externBefore");
+  if (subExtern){
+    var extRate = Math.round(+c.pBasis || 0);
+    subExtern.textContent = "Jahre vor dem Unternehmen – gerechnet mit CHF " + fmt(extRate) +
+      "/Monat, verschiebt auch den Start im Verlauf";
+  }
 }
 
 function onEdit(e){
@@ -686,16 +988,26 @@ function lineChart(models, mode){
          '" stroke="'+(g===0?'#16181D':'#E2E5EA')+'"/>' +
          '<text x="'+(padL-8)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="#646C78">'+fmt(g)+'</text>';
   }
+  // With end-alignment the right edge is "today", so label the axis with real
+  // calendar years instead of an abstract index.
+  // "Today" sits at the end of real history; anything to the right of it is
+  // simulated, so the axis must not re-anchor when extra years are added.
+  var todayAbs = (state.alignEnd && TODAY_ABS !== null)
+    ? TODAY_ABS
+    : maxAbs - (state.extraYears || 0);
+  function axisLabel(a){
+    return state.alignEnd ? String(TODAY_YEAR - (todayAbs - a)) : String(a);
+  }
   var every = Math.max(1, Math.ceil(span / 12));
   for (var a = minAbs; a <= maxAbs; a++){
     if ((a - minAbs) % every === 0 || a === minAbs || a === maxAbs)
-      s += '<text x="'+X(a).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10.5" fill="#646C78">'+a+'</text>';
+      s += '<text x="'+X(a).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10.5" fill="#646C78">'+axisLabel(a)+'</text>';
   }
   models.forEach(function(m, i){
     // Two lead-in phases before this employer: unpaid lead time (e.g. full-time
     // studies) at zero, then external employment valued at today's base salary.
     if (m.offset <= minAbs) return;
-    var col = COLORS[i % COLORS.length];
+    var col = colorFor(m.idx);
     var p1 = minAbs + m.offsetStudy, p2 = m.offset;
     var joinVal  = mode === "cum" ? m.preEarn : m.preMonthly;
     var startVal = mode === "cum" ? m.rows[0].cum : m.rows[0].monthly;
@@ -713,19 +1025,41 @@ function lineChart(models, mode){
     s += '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="1.75" stroke-dasharray="4,3" opacity="0.5" stroke-linecap="round" stroke-linejoin="round"/>';
   });
   models.forEach(function(m, i){
-    var col = COLORS[i % COLORS.length], d = "";
-    m.rows.forEach(function(r, j){
-      var abs = m.offset + (r.y - 1);
-      d += (j ? "L" : "M") + X(abs).toFixed(1) + " " + Y(mode === "cum" ? r.cum : r.monthly).toFixed(1) + " ";
-    });
-    s += '<path d="'+d+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
-    var last = m.rows[m.rows.length-1], lastAbs = m.offset + last.y - 1;
-    s += '<circle cx="'+X(lastAbs).toFixed(1)+'" cy="'+Y(mode==="cum"?last.cum:last.monthly).toFixed(1)+'" r="3.5" fill="'+col+'"/>';
+    var col = colorFor(m.idx);
+    var V = function(r){ return mode === "cum" ? r.cum : r.monthly; };
+    var pt = function(r){ return X(m.offset + (r.y - 1)).toFixed(1) + " " + Y(V(r)).toFixed(1); };
+    var cut = Math.max(1, m.realN);   // rows up to here are real
+
+    // Real history: solid.
+    var dReal = "";
+    m.rows.slice(0, cut).forEach(function(r, j){ dReal += (j ? "L" : "M") + pt(r) + " "; });
+    if (dReal) s += '<path d="'+dReal+'" fill="none" stroke="'+col+
+      '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>';
+
+    // Simulated continuation: dashed, starting from the last real point.
+    if (m.simYears > 0 && m.rows.length > cut){
+      var dSim = "";
+      m.rows.slice(cut - 1).forEach(function(r, j){ dSim += (j ? "L" : "M") + pt(r) + " "; });
+      s += '<path d="'+dSim+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-dasharray="5,4" ' +
+           'stroke-linejoin="round" stroke-linecap="round" opacity="0.75"/>';
+      var rEnd = m.rows[cut - 1];
+      s += '<circle cx="'+X(m.offset + rEnd.y - 1).toFixed(1)+'" cy="'+Y(V(rEnd)).toFixed(1)+
+           '" r="2.5" fill="#fff" stroke="'+col+'" stroke-width="1.5"/>';
+    }
+    var last = m.rows[m.rows.length-1];
+    s += '<circle cx="'+X(m.offset + last.y - 1).toFixed(1)+'" cy="'+Y(V(last)).toFixed(1)+
+         '" r="3.5" fill="'+col+'"/>';
   });
+  if (state.alignEnd && todayAbs < maxAbs && todayAbs >= minAbs){
+    var tx = X(todayAbs);
+    s += '<line x1="'+tx.toFixed(1)+'" y1="'+padT+'" x2="'+tx.toFixed(1)+'" y2="'+(padT+ih)+
+         '" stroke="#16181D" stroke-width="1" stroke-dasharray="2,3" opacity="0.55"/>' +
+         '<text x="'+(tx+4).toFixed(1)+'" y="'+(padT+11)+'" font-size="10.5" fill="#646C78">heute</text>';
+  }
   s += '<line id="hoverGuide" x1="0" y1="'+padT+'" x2="0" y2="'+(padT+ih)+
        '" stroke="#16181D" stroke-width="1" opacity="0"/>';
   models.forEach(function(m, i){
-    s += '<circle id="hoverDot'+i+'" r="4.5" fill="'+COLORS[i%COLORS.length]+'" stroke="#fff" stroke-width="1.5" opacity="0"/>';
+    s += '<circle id="hoverDot'+i+'" r="4.5" fill="'+colorFor(m.idx)+'" stroke="#fff" stroke-width="1.5" opacity="0"/>';
   });
   s += '<rect id="hoverCatch" x="'+padL+'" y="'+padT+'" width="'+iw+'" height="'+ih+'" fill="transparent"/>';
   s += '</svg>';
@@ -758,30 +1092,65 @@ function lineChart(models, mode){
     var abs = absAt(clientX), x = X(abs);
     guide.setAttribute("x1", x); guide.setAttribute("x2", x); guide.setAttribute("opacity", "1");
 
-    var rowsHtml = "";
-    models.forEach(function(m, i){
+    var entries = [];
+    models.forEach(function(m, di){
       var ry = abs - m.offset + 1;
+      var e = { di:di, idx:m.idx, name:m.name };
       if (ry >= 1 && ry <= m.N){
-        var v = mode === "cum" ? m.rows[ry-1].cum : m.rows[ry-1].monthly;
-        dots[i].setAttribute("cx", x); dots[i].setAttribute("cy", Y(v).toFixed(1));
-        dots[i].setAttribute("opacity", "1"); dots[i].setAttribute("r", "4.5");
-        rowsHtml += '<div class="ttrow"><i style="background:'+COLORS[i%COLORS.length]+'"></i>' +
-          '<span class="ttname">'+esc(state.scenarios[i].name)+'</span><span class="ttval">'+fmt(v)+'</span></div>';
+        e.v = mode === "cum" ? m.rows[ry-1].cum : m.rows[ry-1].monthly;
+        e.state = ry > m.realN ? "sim" : "active";
+        dots[di].setAttribute("cx", x); dots[di].setAttribute("cy", Y(e.v).toFixed(1));
+        dots[di].setAttribute("opacity", "1"); dots[di].setAttribute("r", "4.5");
       } else if (ry < 1){
         var lead = leadValueAt(m, abs);
-        var lv = mode === "cum" ? lead.cum : lead.monthly;
-        dots[i].setAttribute("cx", x); dots[i].setAttribute("cy", Y(lv).toFixed(1));
-        dots[i].setAttribute("opacity", "0.65"); dots[i].setAttribute("r", "3.5");
-        rowsHtml += '<div class="ttrow off"><i style="background:'+COLORS[i%COLORS.length]+'"></i>' +
-          '<span class="ttname">'+esc(state.scenarios[i].name)+'</span><span class="ttval">'+fmt(lv)+
-          ' <span style="opacity:.7">(vor Eintritt)</span></span></div>';
+        e.v = mode === "cum" ? lead.cum : lead.monthly;
+        e.state = "pre";
+        dots[di].setAttribute("cx", x); dots[di].setAttribute("cy", Y(e.v).toFixed(1));
+        dots[di].setAttribute("opacity", "0.65"); dots[di].setAttribute("r", "3.5");
       } else {
-        dots[i].setAttribute("opacity", "0");
-        rowsHtml += '<div class="ttrow off"><i style="background:'+COLORS[i%COLORS.length]+'"></i>' +
-          '<span class="ttname">'+esc(state.scenarios[i].name)+'</span><span class="ttval">Zeitraum beendet</span></div>';
+        e.v = -1; e.state = "done";
+        dots[di].setAttribute("opacity", "0");
       }
+      entries.push(e);
     });
-    tip.innerHTML = '<div class="tthead">Jahr '+abs+'</div>' + rowsHtml;
+
+    // Diffs are shown against the chosen baseline person at this same year.
+    var baseEntry = null;
+    entries.forEach(function(e){ if (e.idx === state.baseline) baseEntry = e; });
+
+    var LIMIT = 10;
+    var shown = entries, hidden = 0;
+    if (entries.length > LIMIT){
+      var keep = entries.filter(function(e){ return e.idx === state.active || e.idx === state.baseline; });
+      var kept = {}; keep.forEach(function(e){ kept[e.idx] = 1; });
+      var rest = entries.filter(function(e){ return !kept[e.idx]; })
+                        .sort(function(a, b){ return b.v - a.v; });
+      shown = keep.concat(rest.slice(0, LIMIT - keep.length));
+      hidden = entries.length - shown.length;
+    }
+
+    var rowsHtml = shown.map(function(e){
+      var cls = (e.state === "active" || e.state === "sim") ? "ttrow" : "ttrow off";
+      if (e.idx === state.active) cls += " cur";
+      var val = e.state === "done" ? "Zeitraum beendet"
+              : e.state === "pre" ? fmt(e.v) + ' <span style="opacity:.7">(vor Eintritt)</span>'
+              : e.state === "sim" ? fmt(e.v) + ' <span style="opacity:.7">(simuliert)</span>'
+              : fmt(e.v);
+      var diff = "";
+      if (baseEntry && e.idx !== state.baseline && e.v >= 0 && baseEntry.v >= 0 && e.state !== "done"){
+        var d = e.v - baseEntry.v;
+        diff = '<span class="ttdiff ' + (d > 0 ? "up" : d < 0 ? "down" : "") + '">' + signed(d) + '</span>';
+      } else if (e.idx === state.baseline){
+        diff = '<span class="ttdiff base">Referenz</span>';
+      }
+      return '<div class="' + cls + '">' +
+        '<i style="background:' + colorFor(e.idx) + '"></i>' +
+        '<span class="ttname">' + esc(e.name) + '</span>' +
+        '<span class="ttval">' + val + '</span>' + diff + '</div>';
+    }).join("");
+    if (hidden > 0) rowsHtml += '<div class="ttmore">und ' + hidden + ' weitere</div>';
+
+    tip.innerHTML = '<div class="tthead">' + (state.alignEnd ? axisLabel(abs) : 'Jahr ' + abs) + '</div>' + rowsHtml;
     tip.style.display = "block";
 
     var wr = wrap.getBoundingClientRect();
@@ -809,15 +1178,19 @@ function lineChart(models, mode){
   }, { passive:false });
   svgEl.addEventListener("touchend", hide);
 
-  $("lineLegend").innerHTML = models.map(function(m, i){
-    return '<span><i class="swatch" style="background:'+COLORS[i % COLORS.length]+'"></i>' +
-      esc(state.scenarios[i].name) + (m.offset > 0 ? ' <span style="color:var(--muted)">(ab Jahr '+m.offset+')</span>' : '') +
-      '</span>';
+  $("lineLegend").innerHTML = models.map(function(m){
+    return '<span class="lg' + (m.idx === state.active ? ' cur' : '') + '" data-i="' + m.idx + '">' +
+      '<i class="swatch" style="background:'+colorFor(m.idx)+'"></i>' + esc(m.name) + '</span>';
   }).join("");
 
-  $("lineNote").textContent = hasOffsets
-    ? "Jahr 0 ist der gemeinsame Startpunkt. Die gestrichelte Linie zeigt die Zeit vor Eintritt – die Person verdient hier noch nichts, bis die Linie ansteigt."
-    : "Jahr 0 ist der gemeinsame Startpunkt aller Szenarien.";
+  var anySim = models.some(function(m){ return m.simYears > 0; });
+  $("lineNote").textContent = state.alignEnd
+    ? "Reale Verläufe enden heute (" + axisLabel(todayAbs) + "). Der Start ergibt sich rückwärts aus " +
+      "externen plus internen Jahren; davor wird nichts verdient." +
+      (anySim ? " Gestrichelt ab dem hellen Punkt: simulierte Jahre bis " + axisLabel(maxAbs) + "." : "")
+    : (hasOffsets
+      ? "Jahr 0 ist der gemeinsame Startpunkt. Die gestrichelte Linie zeigt die Zeit vor Eintritt – die Person verdient hier noch nichts, bis die Linie ansteigt."
+      : "Jahr 0 ist der gemeinsame Startpunkt aller Szenarien.");
 }
 
 function stackChart(rows){
@@ -826,7 +1199,7 @@ function stackChart(rows){
   var gap = n > 24 ? 1 : (n > 12 ? 2 : 4);
   var bw = Math.max(2, iw / n - gap);
   var max = 0;
-  rows.forEach(function(r){ max = Math.max(max, r.monthly + r.kidsM + r.spesenM); });
+  rows.forEach(function(r){ max = Math.max(max, r.monthly + r.spesenM); });
   var step = max > 12000 ? 4000 : (max > 6000 ? 2000 : 1000);
   var top = Math.ceil(max * 1.05 / step) * step || step;
   var sc = function(v){ return v / top * ih; };
@@ -838,11 +1211,11 @@ function stackChart(rows){
          '" stroke="'+(g===0?'#16181D':'#E2E5EA')+'"/>' +
          '<text x="'+(padL-8)+'" y="'+(yy+4).toFixed(1)+'" text-anchor="end" font-size="10.5" fill="#646C78">'+fmt(g)+'</text>';
   }
-  var cols = ["var(--c-basis)","var(--c-erf)","var(--c-qual)","var(--c-treue)","var(--c-kind)","var(--c-spesen)"];
+  var cols = ["var(--c-basis)","var(--c-erf)","var(--c-qual)","var(--c-treue)","var(--c-spesen)"];
   var every = Math.ceil(n / 12);
   rows.forEach(function(r, i){
     var x = padL + i * (iw / n) + gap / 2, acc = 0;
-    [r.basis, r.erf, r.qual, r.treue, r.kidsM, r.spesenM].forEach(function(v, k){
+    [r.basis, r.erf, r.qual, r.treue, r.spesenM].forEach(function(v, k){
       if (v <= 0) return;
       var h = sc(v), yy = padT + ih - sc(acc) - h;
       s += '<rect x="'+x.toFixed(1)+'" y="'+yy.toFixed(1)+'" width="'+bw.toFixed(1)+
@@ -864,68 +1237,168 @@ function esc(s){
 
 // ---------------- render ----------------
 function renderChips(){
+  var vis = visibleCount();
   var h = "";
   state.scenarios.forEach(function(c, i){
-    h += '<span class="chip'+(i===state.active?' on':'')+'" data-i="'+i+'" role="button" tabindex="0">' +
-         '<i class="dot" style="background:'+COLORS[i%COLORS.length]+'"></i>'+esc(c.name);
-    if (state.scenarios.length > 1) h += '<button class="x" data-del="'+i+'" title="Szenario entfernen">×</button>';
+    var cls = "chip" + (i === state.active ? " on" : "") + (c.hidden ? " off" : "") +
+              (i === state.baseline ? " base" : "");
+    h += '<span class="' + cls + '" data-i="' + i + '" role="button" tabindex="0">' +
+         '<button class="vis" data-vis="' + i + '" title="' + (c.hidden ? "Einblenden" : "Ausblenden") + '">' +
+         (c.hidden ? "○" : "●") + '</button>' +
+         '<i class="dot" style="background:' + colorFor(i) + '"></i>' + esc(c.name);
+    if (i === state.baseline) h += '<span class="basetag">Referenz</span>';
+    if (state.scenarios.length > 1) h += '<button class="x" data-del="' + i + '" title="Szenario entfernen">×</button>';
     h += '</span>';
   });
   $("chips").innerHTML = h;
-  $("scCount").textContent = state.scenarios.length + " von 6";
-  $("addBtn").disabled = state.scenarios.length >= 6;
+  $("scCount").textContent = vis + " von " + state.scenarios.length + " sichtbar";
+  $("addBtn").disabled = state.scenarios.length >= MAX_SCENARIOS;
+
+  var sel = $("baselineSelect");
+  sel.innerHTML = state.scenarios.map(function(c, i){
+    return '<option value="' + i + '"' + (i === state.baseline ? " selected" : "") + '>' + esc(c.name) + '</option>';
+  }).join("");
 }
 
 function renderCompare(models){
-  var base = models[0], n = models.length;
+  if (!models.length){ $("cmpTable").innerHTML = ""; $("cmpNote").textContent = ""; return; }
+  var anyHidden = state.scenarios.some(function(c){ return c.hidden; });
+  // Row layout also handles hidden entries, so use it whenever any exist.
+  var many = models.length > 5 || anyHidden;
   var maxGrand = Math.max.apply(null, models.map(function(m){ return m.grand; }));
+  var base = modelFor(models, state.baseline) || models[0];
+  var hasPre = models.some(function(m){ return m.tot.pre > 0; });
+  var hasBonus = models.some(function(m){ return m.tot.bonus > 0; });
 
-  var head = "<thead><tr><th></th>";
-  state.scenarios.forEach(function(c, i){
-    head += '<th><span class="dot" style="background:'+COLORS[i%COLORS.length]+'"></span>'+esc(c.name)+'</th>';
-  });
-  head += "</tr></thead>";
-
-  function row(label, get, cls){
-    var r = '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+label+'</td>';
-    models.forEach(function(m){ r += "<td>" + get(m) + "</td>"; });
-    return r + "</tr>";
+  function diffCell(m){
+    if (m.idx === base.idx) return '<td class="dim">Referenz</td>';
+    var d = m.grand - base.grand;
+    return '<td class="' + (d > 0 ? "up" : d < 0 ? "down" : "dim") + '">' + signed(d) + '</td>';
   }
 
-  var body = "<tbody>";
-  body += row("Jahre", function(m){ return m.N; });
-  body += row("Monatslohn Jahr 1", function(m){ return fmt(m.first); });
-  body += row("Monatslohn letztes Jahr", function(m){ return fmt(m.last); });
-  body += row("Ø Monatslohn", function(m){ return fmt(m.avg); });
-  if (models.some(function(m){ return m.tot.pre > 0; })){
-    body += row("Extern vor Eintritt", function(m){ return m.tot.pre > 0 ? fmt(m.tot.pre) : "–"; });
-  }
-  body += row("Lohn total", function(m){ return fmt(m.tot.salary); });
-  if (models.some(function(m){ return m.tot.bonus > 0; })){
-    body += row("Bonus total", function(m){ return m.tot.bonus > 0 ? fmt(m.tot.bonus) : "–"; });
-  }
-  body += row("Spesen total", function(m){ return fmt(m.tot.spesen); });
-  body += row("Kinderzulagen total", function(m){ return fmt(m.tot.kids); });
-  body += '<tr class="total"><td>Ausbezahlt total</td>';
-  models.forEach(function(m, i){
-    body += "<td>" + fmt(m.grand) +
-      '<div class="barcell" style="background:'+COLORS[i%COLORS.length]+
-      ';width:'+(maxGrand ? (m.grand/maxGrand*100) : 0).toFixed(1)+'%"></div></td>';
-  });
-  body += "</tr>";
-  if (n > 1){
-    body += '<tr class="delta"><td>Differenz zu «'+esc(state.scenarios[0].name)+'»</td>';
-    models.forEach(function(m, i){
-      body += "<td>" + (i === 0 ? "–" : signed(m.grand - base.grand)) + "</td>";
+  if (many){
+    var idx = models.map(function(_, i){ return i; });
+    idx.sort(function(a, b){ return models[b].grand - models[a].grand; });
+
+    var h = '<thead><tr><th class="visCol">' +
+      '<button class="vis all" id="visAllBtn" title="' + (anyHidden ? 'Alle einblenden' : 'Alle ausblenden') +
+      '">' + (anyHidden ? '○' : '●') + '</button></th><th style="text-align:left">Szenario</th>' +
+      '<th title="Jahre im Unternehmen">Int.</th>' +
+      '<th title="Externe Jahre vor Eintritt">Ext.</th>' +
+      '<th title="Berufsjahre total">Total J.</th>' +
+      '<th title="AHV-Alter erreicht">AHV</th>' +
+      '<th title="Monatslohn im letzten Jahr">Lohn/Mt</th>' +
+      '<th title="Grundlohn kumuliert">Basis</th>' +
+      '<th title="Erfahrung kumuliert">Erfahr.</th>' +
+      '<th title="Ausbildung kumuliert">Ausbild.</th>' +
+      '<th title="Firmentreue kumuliert">Treue</th>' +
+      '<th title="Lohn total, Summe der vier Komponenten">Lohn</th>';
+    if (hasPre) h += '<th title="Extern verdient vor Eintritt">Extern</th>';
+    if (hasBonus) h += '<th title="Anteil am Bonus-Pool">Bonus</th>';
+    h += '<th title="Pauschale Spesen kumuliert">Spesen</th>' +
+      '<th title="Ausbezahlt total">Total</th>' +
+      '<th title="Differenz zur Referenzperson">Diff.</th></tr></thead><tbody>';
+
+    idx.forEach(function(k){
+      var m = models[k];
+      h += '<tr class="cmp-row' + (m.idx === state.active ? ' on' : '') +
+           (m.idx === base.idx ? ' isbase' : '') + '" data-i="' + m.idx + '">' +
+        '<td class="visCol"><button class="vis" data-vis="' + m.idx + '" title="Ausblenden">●</button></td>' +
+        '<td style="text-align:left"><span class="dot" style="background:' + colorFor(m.idx) + '"></span>' +
+        esc(m.name) + '</td>' +
+        '<td>' + m.N + (m.fill > 0 ? ' <span class="fill">+' + m.fill + '</span>' : '') + '</td>' +
+        '<td class="dim">' + m.offsetExtern + '</td>' +
+        '<td class="strong">' + (m.offsetExtern + m.N) + '</td>' +
+        '<td class="dim">' + (m.retireYear || '–') +
+          (m.capped > 0 ? ' <span class="capped" title="' + m.capped + ' simulierte Jahre wegen Pensionierung gekappt">✓</span>' : '') + '</td>' +
+        '<td>' + fmt(m.last) + '</td>' +
+        '<td class="dim">' + fmt(m.tot.basis) + '</td>' +
+        '<td class="dim">' + fmt(m.tot.erf) + '</td>' +
+        '<td class="dim">' + fmt(m.tot.qual) + '</td>' +
+        '<td class="dim">' + fmt(m.tot.treue) + '</td>' +
+        '<td>' + fmt(m.tot.salary) + '</td>';
+      if (hasPre)   h += '<td class="dim">' + (m.tot.pre > 0 ? fmt(m.tot.pre) : "–") + '</td>';
+      if (hasBonus) h += '<td class="dim">' + (m.tot.bonus > 0 ? fmt(m.tot.bonus) : "–") + '</td>';
+      h += '<td class="dim">' + fmt(m.tot.spesen) + '</td>';
+      h += '<td class="strong">' + fmt(m.grand) +
+        '<div class="barcell" style="background:' + colorFor(m.idx) +
+        ';width:' + (maxGrand ? (m.grand / maxGrand * 100) : 0).toFixed(1) + '%"></div></td>';
+      h += diffCell(m) + '</tr>';
+    });
+
+    // Hidden scenarios stay listed, greyed out, so they can be switched back on.
+    var extraCols = 13 + (hasPre ? 1 : 0) + (hasBonus ? 1 : 0);
+    state.scenarios.forEach(function(c, i){
+      if (!c.hidden) return;
+      h += '<tr class="cmp-row ishidden" data-i="' + i + '">' +
+        '<td class="visCol"><button class="vis" data-vis="' + i + '" title="Einblenden">○</button></td>' +
+        '<td style="text-align:left"><span class="dot" style="background:' + colorFor(i) + '"></span>' +
+        esc(c.name) + '</td>';
+      for (var k = 0; k < extraCols; k++) h += '<td class="dim">–</td>';
+      h += '</tr>';
+    });
+    h += '</tbody>';
+    $("cmpTable").innerHTML = h;
+  } else {
+    var head = "<thead><tr><th></th>";
+    models.forEach(function(m){
+      head += '<th class="' + (m.idx === base.idx ? 'isbase' : '') + '">' +
+        '<button class="vis" data-vis="' + m.idx + '" title="Ausblenden">●</button> ' +
+        '<span class="dot" style="background:' + colorFor(m.idx) + '"></span>' + esc(m.name) +
+        (m.idx === base.idx ? '<span class="basetag">Referenz</span>' : '') + '</th>';
+    });
+    head += "</tr></thead>";
+
+    function row(label, get, cls){
+      var r = '<tr' + (cls ? ' class="' + cls + '"' : '') + '><td>' + label + '</td>';
+      models.forEach(function(m){ r += "<td>" + get(m) + "</td>"; });
+      return r + "</tr>";
+    }
+
+    var body = "<tbody>";
+    body += row("Jahre intern", function(m){ return m.N + (m.fill > 0 ? ' <span class="fill">+' + m.fill + '</span>' : ''); });
+    body += row("Jahre extern", function(m){ return m.offsetExtern; });
+    body += row("Berufsjahre total", function(m){ return m.offsetExtern + m.N; }, "spanrow");
+    body += row("AHV-Jahr", function(m){ return m.retireYear || "–"; });
+    body += row("Monatslohn Jahr 1", function(m){ return fmt(m.first); });
+    body += row("Monatslohn letztes Jahr", function(m){ return fmt(m.last); });
+    body += row("Ø Monatslohn", function(m){ return fmt(m.avg); });
+    if (hasPre) body += row("Extern vor Eintritt", function(m){ return m.tot.pre > 0 ? fmt(m.tot.pre) : "–"; });
+    body += row("davon Basis", function(m){ return fmt(m.tot.basis); }, "sub");
+    body += row("davon Erfahrung", function(m){ return fmt(m.tot.erf); }, "sub");
+    body += row("davon Ausbildung", function(m){ return fmt(m.tot.qual); }, "sub");
+    body += row("davon Firmentreue", function(m){ return fmt(m.tot.treue); }, "sub");
+    body += row("Lohn total", function(m){ return fmt(m.tot.salary); });
+    if (hasBonus) body += row("Bonus total", function(m){ return m.tot.bonus > 0 ? fmt(m.tot.bonus) : "–"; });
+    body += row("Spesen total", function(m){ return fmt(m.tot.spesen); });
+    body += '<tr class="total"><td>Ausbezahlt total</td>';
+    models.forEach(function(m){
+      body += "<td>" + fmt(m.grand) +
+        '<div class="barcell" style="background:' + colorFor(m.idx) +
+        ';width:' + (maxGrand ? (m.grand / maxGrand * 100) : 0).toFixed(1) + '%"></div></td>';
     });
     body += "</tr>";
+    if (models.length > 1){
+      body += '<tr class="delta"><td>Differenz zu «' + esc(base.name) + '»</td>';
+      models.forEach(function(m){
+        body += (m.idx === base.idx ? "<td>Referenz</td>"
+          : '<td class="' + (m.grand > base.grand ? "up" : m.grand < base.grand ? "down" : "") + '">' +
+            signed(m.grand - base.grand) + "</td>");
+      });
+      body += "</tr>";
+    }
+    body += "</tbody>";
+    $("cmpTable").innerHTML = head + body;
   }
-  body += "</tbody>";
-  $("cmpTable").innerHTML = head + body;
 
   var spans = models.map(function(m){ return m.N; });
   var same = spans.every(function(v){ return v === spans[0]; });
-  $("cmpNote").textContent = same ? "gleiche Laufzeit" : "unterschiedliche Laufzeiten – Totale nicht direkt vergleichbar";
+  $("cmpNote").textContent = (state.formula === "concave" ? "Vorschlag · " : "Original · ") +
+    models.length + " sichtbar · Referenz: " + base.name +
+    (state.equalize
+      ? " · Simulation: alle auf " + (models[0] ? models[0].offsetExtern + models[0].N : 0) +
+        " Berufsjahre aufgefüllt"
+      : " · " + (same ? "gleiche Laufzeit" : "unterschiedliche Laufzeiten"));
 }
 
 function renderDetail(m, c){
@@ -936,16 +1409,15 @@ function renderDetail(m, c){
     (m.tot.pre > 0 ? '<div><span class="k">Extern vor Eintritt</span><span class="v">'+fmt(m.tot.pre)+'</span></div>' : '') +
     '<div><span class="k">Lohn</span><span class="v">'+fmt(m.tot.salary)+'</span></div>' +
     (m.tot.bonus > 0 ? '<div><span class="k">Bonus</span><span class="v">'+fmt(m.tot.bonus)+'</span></div>' : '') +
-    '<div><span class="k">Spesen</span><span class="v">'+fmt(m.tot.spesen)+'</span></div>' +
-    '<div><span class="k">Kinderzulagen</span><span class="v">'+fmt(m.tot.kids)+'</span></div>';
+    '<div><span class="k">Spesen</span><span class="v">'+fmt(m.tot.spesen)+'</span></div>';
 
   stackChart(m.rows);
   var l = m.rows[m.N-1];
-  $("stackNote").textContent = "Im Jahr " + m.N + ": CHF " + fmt(l.monthly + l.kidsM + l.spesenM) +
+  $("stackNote").textContent = "Im Jahr " + m.N + ": CHF " + fmt(l.monthly + l.spesenM) +
     " pro Monat inklusive Zulage und Spesen.";
 
   var h = '<thead><tr><th>Jahr</th><th>Basis</th><th>Erfahrung</th><th>Qualifikation</th><th>Firmentreue</th>' +
-          '<th>Monatslohn</th><th>Lohn / Jahr</th><th>Bonus</th><th>Spesen</th><th>Kinder</th><th>Kumuliert</th>' +
+          '<th>Monatslohn</th><th>Lohn / Jahr</th><th>Bonus</th><th>Spesen</th><th>Kumuliert</th>' +
           '<th style="text-align:left">Ereignis</th></tr></thead><tbody>';
 
   if (m.offset > 0){
@@ -974,54 +1446,114 @@ function renderDetail(m, c){
       '<td class="dim">'+fmt(r.basis)+'</td><td>'+fmt(r.erf)+'</td><td>'+fmt(r.qual)+'</td><td>'+fmt(r.treue)+'</td>' +
       '<td class="strong">'+fmt(r.monthly)+'</td><td>'+fmt(r.salaryY)+'</td>' +
       '<td class="dim">'+(r.bonusY > 0 ? fmt(r.bonusY) : "–")+'</td>' +
-      '<td class="dim">'+fmt(r.spesenY)+'</td><td class="dim">'+fmt(r.kidsY)+'</td>' +
+      '<td class="dim">'+fmt(r.spesenY)+'</td>' +
       '<td class="strong">'+fmt(r.cum)+'</td><td class="events">'+esc(r.events)+'</td></tr>';
   });
   h += '</tbody><tfoot><tr><td>Total</td><td></td><td></td><td></td><td></td><td></td>' +
-       '<td>'+fmt(m.tot.salary)+'</td><td>'+fmt(m.tot.bonus)+'</td><td>'+fmt(m.tot.spesen)+'</td><td>'+fmt(m.tot.kids)+'</td>' +
+       '<td>'+fmt(m.tot.salary)+'</td><td>'+fmt(m.tot.bonus)+'</td><td>'+fmt(m.tot.spesen)+'</td>' +
        '<td>'+fmt(m.grand)+'</td><td></td></tr></tfoot>';
   $("yrTable").innerHTML = h;
 }
 
 function render(){
+  syncFormula();
   syncEditorToggle();
+  // Keep selection and baseline pointing at something that exists and is shown.
+  if (state.active >= state.scenarios.length) state.active = 0;
+  if (state.baseline >= state.scenarios.length) state.baseline = 0;
+  if (!visibleCount()) state.scenarios[0].hidden = false;
+  if (state.scenarios[state.active].hidden){
+    for (var vi = 0; vi < state.scenarios.length; vi++)
+      if (!state.scenarios[vi].hidden){ state.active = vi; break; }
+  }
   var c = state.scenarios[state.active];
   $("extraYearsSlider").value = state.extraYears;
   $("extraYearsVal").textContent = state.extraYears;
   if (document.activeElement !== $("bonusPoolInput")) $("bonusPoolInput").value = state.bonusPool;
+  $("alignEndToggle").checked = state.alignEnd;
+  $("equalizeToggle").checked = state.equalize;
+  $("capRetireToggle").checked = state.capRetire;
   var models = computeAll();
   renderChips();
   fillForm();
   renderCompare(models);
   lineChart(models, state.mode);
-  renderDetail(models[state.active], c);
+  renderDetail(modelFor(models, state.active) || models[0], c);
 
   $("assumptions").innerHTML =
     "<b>Annahmen.</b> Lohn " + c.pSalMonths + "× pro Jahr, Spesen " + c.pSpesenMonths +
-    "×, Kinderzulagen " + c.pKindMonths + "×. Abschlüsse zählen ab dem Jahr nach Studienende. " +
+    "×. Abschlüsse zählen ab dem Jahr nach Studienende. " +
     "Erfahrung und Firmentreue basieren auf " +
     (c.counting === "current" ? "dem laufenden Jahr" : "abgeschlossenen Jahren") +
     ". Bruttobeträge ohne Sozialabzüge und ohne Arbeitgeberbeiträge." +
     (state.sync ? "" : " Die Formel-Parameter sind pro Szenario unterschiedlich gesetzt.") +
+    (state.capRetire ? " Simulierte Jahre enden mit dem AHV-Alter 65; danach wird nichts mehr dazugerechnet." :
+      " <b>Achtung:</b> Die Pensionierung wird ignoriert – simulierte Jahre laufen über das AHV-Alter hinaus weiter.") +
     (state.extraYears > 0 ? " Jedes Szenario wird um " + state.extraYears +
       (state.extraYears === 1 ? " zusätzliches Jahr" : " zusätzliche Jahre") +
       " über seine eigene Berechnungsdauer hinaus fortgeschrieben." : "") +
     (models.some(function(m){ return m.tot.pre > 0; }) ?
-      " Externe Erfahrung wird zum heutigen Grundlohn (pensumbereinigt, ohne Spesen, ohne Teuerung) nachgerechnet und ins Total eingerechnet." : "") +
+      " Externe Erfahrung wird mit CHF " + fmt(c.pBasis) + "/Monat (heutiger Grundlohn, ohne Spesen, ohne Teuerung) nachgerechnet und ins Total eingerechnet." : "") +
     (state.bonusPool > 0 ?
-      " CHF " + fmt(state.bonusPool) + " Bonus-Pool wird pro Jahr anteilig nach Jahreslohn auf alle aktiven Szenarien verteilt – gleicher Lohn bedeutet gleicher Anteil." : "");
+      " CHF " + fmt(state.bonusPool) + " Bonus-Pool wird pro Jahr anteilig nach Jahreslohn auf alle sichtbaren Szenarien verteilt – gleicher Lohn bedeutet gleicher Anteil." : "") +
+    " Ausgeblendete Szenarien zählen nirgends mit: weder im Diagramm noch im Bonus-Pool." +
+    (state.equalize ? " <b>Simulation:</b> alle sichtbaren Personen sind mit zusätzlichen internen Jahren " +
+      "auf das höchste sichtbare Berufsalter aufgefüllt. Externe Jahre bleiben unverändert, " +
+      "die Zahlen entsprechen also nicht den tatsächlich ausbezahlten Beträgen." : "");
 
   writeHash();
 }
 
 // ---------------- events ----------------
+$("baselineSelect").addEventListener("change", function(){
+  state.baseline = +this.value;
+  render();
+});
+
+$("showAllBtn").addEventListener("click", function(){
+  state.scenarios.forEach(function(c){ c.hidden = false; });
+  render();
+});
+
+$("onlyActiveBtn").addEventListener("click", function(){
+  state.scenarios.forEach(function(c, i){ c.hidden = (i !== state.active && i !== state.baseline); });
+  render();
+});
+
+$("lineLegend").addEventListener("click", function(e){
+  var lg = e.target.closest(".lg");
+  if (lg){ state.active = +lg.dataset.i; render(); }
+});
+
+$("cmpTable").addEventListener("click", function(e){
+  if (e.target.id === "visAllBtn"){
+    // Flip between everything shown and nothing shown; the selected scenario
+    // and the reference always stay visible so the view never goes empty.
+    var wasHidden = state.scenarios.some(function(c){ return c.hidden; });
+    state.scenarios.forEach(function(c, i){
+      c.hidden = wasHidden ? false : (i !== state.active && i !== state.baseline);
+    });
+    render(); return;
+  }
+  var vis = e.target.closest("[data-vis]");
+  if (vis){ e.stopPropagation(); toggleVis(+vis.dataset.vis); return; }
+  var tr = e.target.closest(".cmp-row");
+  if (tr && !tr.classList.contains("ishidden")){ state.active = +tr.dataset.i; render(); }
+});
+
 $("chips").addEventListener("click", function(e){
+  var vis = e.target.closest("[data-vis]");
+  if (vis){ e.stopPropagation(); toggleVis(+vis.dataset.vis); return; }
   var del = e.target.closest("[data-del]");
   if (del){
     e.stopPropagation();
     var i = +del.dataset.del;
+    if (state.scenarios.length <= 1) return;
     state.scenarios.splice(i, 1);
+    if (state.active >= i && state.active > 0) state.active--;
+    if (state.baseline >= i && state.baseline > 0) state.baseline--;
     if (state.active >= state.scenarios.length) state.active = state.scenarios.length - 1;
+    if (state.baseline >= state.scenarios.length) state.baseline = state.scenarios.length - 1;
     render(); return;
   }
   var chip = e.target.closest(".chip");
@@ -1033,7 +1565,7 @@ $("chips").addEventListener("keydown", function(e){
 });
 
 $("addBtn").addEventListener("click", function(){
-  if (state.scenarios.length >= 6) return;
+  if (state.scenarios.length >= MAX_SCENARIOS) return;
   var base = state.sync ? state.scenarios[state.active] : null;
   var s = newScenario("Szenario " + (state.scenarios.length + 1));
   if (base) PARAM_KEYS.forEach(function(k){ s[k] = base[k]; });
@@ -1043,7 +1575,7 @@ $("addBtn").addEventListener("click", function(){
 });
 
 $("dupBtn").addEventListener("click", function(){
-  if (state.scenarios.length >= 6) return;
+  if (state.scenarios.length >= MAX_SCENARIOS) return;
   var c = state.scenarios[state.active];
   state.scenarios.push(newScenario(c.name + " (Kopie)", c));
   state.active = state.scenarios.length - 1;
@@ -1088,8 +1620,57 @@ $("extraYearsSlider").addEventListener("input", function(){
   render();
 });
 
+$("alignEndToggle").addEventListener("change", function(){
+  state.alignEnd = this.checked;
+  render();
+});
+
+$("capRetireToggle").addEventListener("change", function(){
+  state.capRetire = this.checked;
+  render();
+});
+
+// Set the slider high enough that everyone reaches their own AHV year; the
+// per-person cap then trims each one back to their actual retirement.
+$("toRetireBtn").addEventListener("click", function(){
+  var maxRest = 0;
+  state.scenarios.forEach(function(c){
+    if (!c.hidden && c.maxExtra !== undefined) maxRest = Math.max(maxRest, +c.maxExtra);
+  });
+  state.capRetire = true;
+  state.extraYears = Math.min(45, maxRest);
+  render();
+});
+
+$("equalizeToggle").addEventListener("change", function(){
+  state.equalize = this.checked;
+  render();
+});
+
 $("bonusPoolInput").addEventListener("input", function(){
   state.bonusPool = Math.max(0, parseFloat(this.value) || 0);
+  render();
+});
+
+// Highlight the active formula card, flip the segmented control, and show only
+// the parameters that the active formula actually uses.
+function syncFormula(){
+  ["original","concave"].forEach(function(f){
+    var card = $("fcard" + f.charAt(0).toUpperCase() + f.slice(1));
+    if (card) card.classList.toggle("on", state.formula === f);
+  });
+  Array.prototype.forEach.call($("formulaSeg").children, function(b){
+    b.classList.toggle("on", b.dataset.f === state.formula);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-formula-mode]"), function(el){
+    el.style.display = (el.dataset.formulaMode === state.formula) ? "" : "none";
+  });
+}
+
+$("formulaSeg").addEventListener("click", function(e){
+  var b = e.target.closest("button");
+  if (!b) return;
+  state.formula = b.dataset.f;
   render();
 });
 
