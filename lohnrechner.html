@@ -285,7 +285,7 @@
     <div class="simRow simRow2">
       <div class="simLabels">
         <div class="simLabel">Bonus-Pool pro Jahr</div>
-        <div class="simSub">Ein Topf, verteilt pro Jahr anteilig nach Jahreslohn auf alle aktiven Szenarien</div>
+        <div class="simSub">Voller Topf bei voller Belegschaft; verteilt anteilig nach Jahreslohn und schrumpft mit jeder Pensionierung</div>
       </div>
       <div class="bonusInputWrap">
         <span class="bonusPrefix">CHF</span>
@@ -436,6 +436,7 @@ function fmt(n){
 function signed(n){ return (n > 0 ? "+" : n < 0 ? "−" : "±") + fmt(Math.abs(n)); }
 
 var MAX_SCENARIOS = 40;
+var MAX_YEARS = 60;   // hard ceiling on a single projection
 var TODAY_YEAR = new Date().getFullYear();
 var TODAY_ABS = null;   // axis index of "today", set by alignToEnd
 var BASE_COLORS = ["#2F5FE0","#E0672F","#12A594","#8B5CF6","#D8232A","#A8801F"];
@@ -576,8 +577,8 @@ function modelFor(models, idx){
 }
 
 var EMPLOYEES = [
-  {n:"Thilo Haas",y:14,cur:1,e:4,efz:0,hf:0,ba:1,ma:1,cas:0,mas:0,ry:2053,rest:26},
-  {n:"Thomas Moser",y:8,cur:1,e:14,efz:0,hf:0,ba:1,ma:1,cas:0,mas:0,ry:2047,rest:20},
+  {n:"Thilo Haas",y:14,cur:1,e:4.5,efz:0,hf:0,ba:1,ma:1,cas:0,mas:0,ry:2053,rest:26},
+  {n:"Thomas Moser",y:8,cur:1,e:14.5,efz:0,hf:0,ba:1,ma:1,cas:0,mas:0,ry:2047,rest:20},
   {n:"Peter Manser",y:14,cur:1,e:3,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2053,rest:27},
   {n:"Dominique Wirz",y:10,cur:1,e:7,efz:1,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2051,rest:25},
   {n:"Marco Bohler",y:12,cur:1,e:5,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2051,rest:24},
@@ -586,20 +587,20 @@ var EMPLOYEES = [
   {n:"Benjamin Brossi",y:7,cur:1,e:7,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2051,rest:24},
   {n:"Nicola Marcacci Rossi",y:9,cur:1,e:4,efz:0,hf:0,ba:1,ma:1,cas:0,mas:0,ry:2052,rest:26},
   {n:"Sabrina Oertle",y:5,cur:1,e:9,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2051,rest:25},
-  {n:"Lorenz Bösch",y:4,cur:1,e:9,efz:1,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2055,rest:28},
+  {n:"Lorenz Bösch",y:4,cur:1,e:9.5,efz:1,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2055,rest:28},
   {n:"Mike Schmid",y:4,cur:1,e:8,efz:1,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2054,rest:27},
   {n:"Christian Grutsch",y:3,cur:1,e:14,efz:0,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2048,rest:22},
   {n:"Josh Wirth",y:8,cur:1,e:7,efz:1,hf:0,ba:0,ma:0,cas:0,mas:0,ry:2056,rest:29},
   {n:"Nando Schär",y:2,cur:1,e:8,efz:1,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2057,rest:31},
   {n:"Kevin Walker",y:4,cur:1,e:10,efz:1,hf:0,ba:0,ma:0,cas:1,mas:0,ry:2055,rest:29},
-  {n:"Manuel Mumenthaler",y:1,cur:0,e:10,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2056,rest:29},
-  {n:"Eliane Kunz",y:1,cur:0,e:16,efz:1,hf:1,ba:0,ma:0,cas:0,mas:0,ry:2056,rest:29},
+  {n:"Manuel Mumenthaler",y:1,cur:0,e:10.34,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2056,rest:29},
+  {n:"Eliane Kunz",y:1,cur:0,e:16.5,efz:1,hf:1,ba:0,ma:0,cas:0,mas:0,ry:2056,rest:29},
   {n:"Anna Wyss",y:7,cur:1,e:0,efz:0,hf:0,ba:1,ma:0,cas:2,mas:0,ry:2051,rest:25},
   {n:"Damian Caduff",y:5,cur:1,e:8,efz:0,hf:0,ba:0,ma:0,cas:0,mas:0,ry:2052,rest:25},
   {n:"Fabrice Michaud",y:1,cur:0,e:8,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2055,rest:28},
-  {n:"Natàlia Justicia",y:1,cur:0,e:8,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2058,rest:32},
+  {n:"Natàlia Justicia",y:1,cur:0,e:8.75,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2058,rest:32},
   {n:"Sarah Schott",y:1,cur:0,e:8,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2060,rest:33},
-  {n:"Raphael Wirth",y:4,cur:1,e:2,efz:1,hf:1,ba:0,ma:0,cas:1,mas:0,ry:2061,rest:34},
+  {n:"Raphael Wirth",y:4,cur:1,e:2.75,efz:1,hf:1,ba:0,ma:0,cas:1,mas:0,ry:2061,rest:34},
   {n:"Matthias Loser",y:5,cur:1,e:0,efz:0,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2058,rest:32},
   {n:"Marco Baumgartner",y:4,cur:1,e:1,efz:0,hf:0,ba:1,ma:0,cas:1,mas:0,ry:2059,rest:33},
   {n:"Céline Salzmann",y:5,cur:1,e:0,efz:0,hf:0,ba:1,ma:0,cas:0,mas:0,ry:2062,rest:35},
@@ -664,7 +665,9 @@ function bonusFrom(mode, from, dur){
 
 function compute(c, extraYears, mode){
   var concave = mode === "concave";
-  var N = Math.max(1, Math.min(45, Math.round((+c.years || 1) + (+extraYears || 0))));
+  var wantedN = Math.round((+c.years || 1) + (+extraYears || 0));
+  var N = Math.max(1, Math.min(MAX_YEARS, wantedN));
+  var clampedYears = Math.max(0, wantedN - N);   // surfaced instead of silently dropped
   var yearOffset = c.counting === "current" ? 1 : 0;
   var teuerung = (+c.pTeuerung || 0) / 100;
 
@@ -678,10 +681,18 @@ function compute(c, extraYears, mode){
   // Qualifikation/Spesen - those are Smartive-specific) and paid into the
   // cumulative total as if that employer used the same payment schedule.
   var preMonthly = (+c.pBasis);
-  var preEarn = Math.max(0, +c.externBefore || 0) * preMonthly * (+c.pSalMonths);
+  var extExact = Math.max(0, +c.externBefore || 0);        // e.g. 2.75 years
+  var preEarn = extExact * preMonthly * (+c.pSalMonths);   // paid on the exact figure
 
   var offsetStudy  = Math.max(0, Math.round(+c.startOffset || 0));
-  var offsetExtern = Math.max(0, Math.round(+c.externBefore || 0));
+  var offsetExtern = Math.ceil(extExact - 1e-9);           // whole slots on the timeline
+
+  // How much of each external slot was actually worked. Only the earliest slot
+  // can be partial, so the fractions sum back to extExact exactly.
+  var extFracs = [];
+  for (var s = 1; s <= offsetExtern; s++){
+    extFracs.push(Math.max(0, Math.min(1, extExact - (offsetExtern - s))));
+  }
 
   var rows = [], tot = { salary:0, spesen:0, pre:preEarn, bonus:0,
     basis:0, erf:0, qual:0, treue:0 }, cum = preEarn;
@@ -707,11 +718,12 @@ function compute(c, extraYears, mode){
       credit += Math.min(cmY, +c.cCasMasCap);
 
       var Emax = +c.pEmax, r = Math.min(0.999, Math.max(0.01, +c.pDecay));
-      var nWork = Math.max(0, (+c.externBefore || 0)) + internYears;
+      var nWork = extExact + internYears;
       erf  = Emax * (1 - Math.pow(r, nWork));
       qual = Emax * (1 - Math.pow(r, nWork + credit)) - erf;
     } else {
-      var ext = Math.min((+c.externBefore) * (+c.pExtRate), +c.pExtCap);
+      // Notion credits only whole external years towards the bonus.
+      var ext = Math.min(Math.floor(extExact) * (+c.pExtRate), +c.pExtCap);
       erf = Math.min(ext + internYears * (+c.pIntRate), +c.pErfCap);
 
       var q = 0;
@@ -755,7 +767,8 @@ tot.salary += salaryY; tot.spesen += spesenY;
   }
   return { rows:rows, tot:tot, N:N,
     offset:offsetStudy + offsetExtern, offsetStudy:offsetStudy, offsetExtern:offsetExtern,
-    preEarn:preEarn, preMonthly:preMonthly,
+    preEarn:preEarn, preMonthly:preMonthly, extExact:extExact, extFracs:extFracs,
+    clampedYears:clampedYears,
     grand:tot.salary + tot.spesen + tot.pre + tot.bonus,
     first:rows[0].monthly, last:rows[N-1].monthly, avg:tot.salary / N / (+c.pSalMonths) };
 }
@@ -776,16 +789,20 @@ function applyBonusPool(models, pool){
     });
   });
 
-  if (pool > 0 && isFinite(minY)){
+  if (pool > 0 && isFinite(minY) && models.length){
     for (var abs = minY; abs <= maxY; abs++){
       var active = [];
       models.forEach(function(m){
         var ry = abs - m.offset + 1;
         if (ry >= 1 && ry <= m.N) active.push(m.rows[ry - 1]);
       });
+      // The pool is funded by the people actually working that year: it scales
+      // with headcount, so retirements shrink it rather than handing the whole
+      // budget to whoever is left.
+      var poolThisYear = pool * (active.length / models.length);
       var totalSalary = active.reduce(function(s, r){ return s + r.salaryY; }, 0);
       if (totalSalary > 0){
-        active.forEach(function(r){ r.bonusY = pool * (r.salaryY / totalSalary); });
+        active.forEach(function(r){ r.bonusY = poolThisYear * (r.salaryY / totalSalary); });
       }
     }
   }
@@ -1081,11 +1098,14 @@ function lineChart(models, mode){
 
   function leadValueAt(m, abs){
     // abs is 0-indexed and known to be before this scenario's start (m.offset)
-    var inExtern = abs >= m.offsetStudy;
-    if (!inExtern) return { monthly: 0, cum: 0 };
-    var extPerYear = m.offsetExtern > 0 ? m.preEarn / m.offsetExtern : 0;
-    var k = abs - m.offsetStudy + 1;
-    return { monthly: m.preMonthly, cum: extPerYear * k };
+    if (abs < m.offsetStudy) return { monthly: 0, cum: 0 };
+    var k = abs - m.offsetStudy + 1;          // 1-based external slot
+    var worked = 0;
+    for (var i = 0; i < k && i < m.extFracs.length; i++) worked += m.extFracs[i];
+    var frac = m.extFracs[k - 1] || 0;
+    // Monthly pay is the full base rate; a partial year means fewer months,
+    // not a lower salary - so only the cumulative figure is pro-rated.
+    return { monthly: frac > 0 ? m.preMonthly : 0, cum: worked * m.preMonthly * 13 };
   }
 
   function showAt(clientX, clientY){
@@ -1424,12 +1444,14 @@ function renderDetail(m, c){
     // Years before this employer: zero during any extra lead time
     // (Zusätzlicher Startpunkt), and only the external base salary
     // during the external-experience portion, if any.
-    var extPerYear = m.offsetExtern > 0 ? m.preEarn / m.offsetExtern : 0;
+    var perYear = m.preEarn > 0 && m.extExact > 0 ? m.preEarn / m.extExact : 0;
     var leadCum = 0;
     for (var i = 1; i <= m.offset; i++){
-      var inExtern = i > m.offsetStudy;
+      var slot = i - m.offsetStudy;                       // 1-based external slot
+      var frac = slot > 0 ? (m.extFracs[slot - 1] || 0) : 0;
+      var inExtern = frac > 0;
       var leadMonthly = inExtern ? m.preMonthly : 0;
-      var leadYearEarn = inExtern ? extPerYear : 0;
+      var leadYearEarn = frac * perYear;
       leadCum += leadYearEarn;
       h += '<tr class="lead"><td>Vorlauf ' + i + '</td>' +
         '<td class="dim">–</td><td class="dim">–</td><td class="dim">–</td><td class="dim">–</td>' +
@@ -1487,6 +1509,9 @@ function render(){
     (c.counting === "current" ? "dem laufenden Jahr" : "abgeschlossenen Jahren") +
     ". Bruttobeträge ohne Sozialabzüge und ohne Arbeitgeberbeiträge." +
     (state.sync ? "" : " Die Formel-Parameter sind pro Szenario unterschiedlich gesetzt.") +
+    (models.some(function(m){ return m.clampedYears > 0; }) ?
+      " <b>Achtung:</b> Mindestens ein Szenario überschreitet die Obergrenze von " + MAX_YEARS +
+      " Jahren und wurde gekürzt." : "") +
     (state.capRetire ? " Simulierte Jahre enden mit dem AHV-Alter 65; danach wird nichts mehr dazugerechnet." :
       " <b>Achtung:</b> Die Pensionierung wird ignoriert – simulierte Jahre laufen über das AHV-Alter hinaus weiter.") +
     (state.extraYears > 0 ? " Jedes Szenario wird um " + state.extraYears +
@@ -1495,7 +1520,7 @@ function render(){
     (models.some(function(m){ return m.tot.pre > 0; }) ?
       " Externe Erfahrung wird mit CHF " + fmt(c.pBasis) + "/Monat (heutiger Grundlohn, ohne Spesen, ohne Teuerung) nachgerechnet und ins Total eingerechnet." : "") +
     (state.bonusPool > 0 ?
-      " CHF " + fmt(state.bonusPool) + " Bonus-Pool wird pro Jahr anteilig nach Jahreslohn auf alle sichtbaren Szenarien verteilt – gleicher Lohn bedeutet gleicher Anteil." : "") +
+      " CHF " + fmt(state.bonusPool) + " Bonus-Pool wird pro Jahr anteilig nach Jahreslohn verteilt und skaliert mit der Anzahl arbeitender Personen – wer pensioniert ist, verkleinert den Topf." : "") +
     " Ausgeblendete Szenarien zählen nirgends mit: weder im Diagramm noch im Bonus-Pool." +
     (state.equalize ? " <b>Simulation:</b> alle sichtbaren Personen sind mit zusätzlichen internen Jahren " +
       "auf das höchste sichtbare Berufsalter aufgefüllt. Externe Jahre bleiben unverändert, " +
@@ -1638,7 +1663,7 @@ $("toRetireBtn").addEventListener("click", function(){
     if (!c.hidden && c.maxExtra !== undefined) maxRest = Math.max(maxRest, +c.maxExtra);
   });
   state.capRetire = true;
-  state.extraYears = Math.min(45, maxRest);
+  state.extraYears = Math.min(MAX_YEARS, maxRest);
   render();
 });
 
